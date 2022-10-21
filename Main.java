@@ -3,6 +3,6 @@ import java.util.*;
 
 public class Main {
   public static void main(String[] args) {
-    System.out.println("Hey git");
+    System.out.println("Hey git2");
   }
 }
