@@ -1,12 +1,15 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
     public static void main(String[] args) {
         Game game = new Game();
-        game.askUserName();
-        game.askUserHeroNumber();
-        game.askUserOfHeroType();
+        game.askUserHisName();
+        game.askUserTheNumberOfHeros();
+        game.askUserTheClassOfHeros();
+        game.creatingEnemiesWave();
     }
 }
 
@@ -25,7 +28,7 @@ class askUserForInput {
                 System.out.println("Hey, you just entered a wrong Input. Is typing correctly on your keyboard to hard for you ?");
                 isInputCorrect = false;
             }
-            if (userInput == 0) {
+            if (userInput <= 0) {
                 System.out.println("Hey, you just entered a wrong Input. Is typing correctly on your keyboard to hard for you ?");
                 isInputCorrect = false;
             }
@@ -36,123 +39,193 @@ class askUserForInput {
 
     public static String askAString() {
         Scanner scanner = new Scanner(System.in);
-        String userInput = scanner.nextLine();
-        userInput = userInput.replaceAll("\\s", "");
-        if (userInput.equals("")) {
-            userInput = "Asshole";
-        }
-        return userInput;
+        return scanner.nextLine();
     }
 }
 
 class Game {
     public String nameOfThePlayer;
-    public int numberOfHeros;
+    public int numberOfHerosInput;
 
-    public List<String> heroClassList;
+    public int difficultyCoef = 0 ;
+    public List<String> listOfHeroClassNames = new ArrayList<>();
+    public List<Warrior> listOfWarriorsHeros = new ArrayList<>();
+    public ArrayList<Healer> listOfHealerHeros = new ArrayList<>();
+    public ArrayList<Mage> listOfMageHeros = new ArrayList<>();
+    public ArrayList<Hunter> listOfHunterHeros = new ArrayList<>();
+    public ArrayList<Enemy> listOfEnemies = new ArrayList<>();
 
-    private Combatant combatant;
-
-    public void askUserName() {
+    public void askUserHisName() {
         System.out.println("Hello player on this new adventure !");
         System.out.print("Please remind me your name: ");
-        nameOfThePlayer = askUserForInput.askAString();
-        System.out.println();
+        nameOfThePlayer = (askUserForInput.askAString()).replaceAll("\\s", "");
 
+        if (nameOfThePlayer.equals("")) {
+            nameOfThePlayer = "Dumbass";
+        }
+
+        System.out.println();
     }
 
-    public void askUserHeroNumber() {
-        System.out.println("Oh, " + nameOfThePlayer + " ! Yeah I remember that now.");
+    public void askUserTheNumberOfHeros() {
+        System.out.println("Oh, " + nameOfThePlayer + " ! Yeah I remember you now.");
         System.out.print("And... ahem, how many hero are going to fight by your side ? ");
-        numberOfHeros = askUserForInput.askAnInt();
-        System.out.println();
-        while (numberOfHeros > 5) {
+        numberOfHerosInput = askUserForInput.askAnInt();
+        System.out.println("\n");
+        while (numberOfHerosInput > 5) {
             System.out.println("Oh no no, you are too many on this adventure. Your teammates can be up to 5");
             System.out.print("So, how many hero are going to fight by your side ? ");
-            System.out.println();
-            numberOfHeros = askUserForInput.askAnInt();
+            System.out.println("\n");
+            numberOfHerosInput = askUserForInput.askAnInt();
         }
-        System.out.println("Umm, so you are going to be " + numberOfHeros + " heros, that's a great start");
+        System.out.println("Umm, so you are going to be " + numberOfHerosInput + " heros, that's a great start " + nameOfThePlayer + ". \n");
     }
 
-    public void askUserOfHeroType() {
-        List<Integer> takenHeros = new ArrayList<>();
+    public void askUserTheClassOfHeros() {
 
-        for (int i = 1; i <= numberOfHeros; i++) {
-            System.out.println("What is the class of hero " + i + " hum ?");
+        for (int heroNumber = 1; heroNumber <= numberOfHerosInput; heroNumber++) {
+            System.out.println("What is the class of hero " + heroNumber + " hum ?");
             System.out.println(" 1/ Warrior \n 2/ Hunter \n 3/ Mage \n 4/ Healer");
+
             int userInput = askUserForInput.askAnInt();
-            while (userInput > 4 || userInput < 1 || takenHeros.contains(userInput)) {
-                System.out.println("You're choice isn't recognized or you already chose this class \n");
+            while (userInput > 4 || userInput < 1) {
+                System.out.println("You're choice isn't recognized \n");
                 userInput = askUserForInput.askAnInt();
             }
-
-            takenHeros.add(userInput);
-            settingUpHeroClass(userInput);
+            settingUpHeroClass(userInput, heroNumber);
         }
-        System.out.print("Alright, so your team is composed of: ");
-        System.out.println(heroClassList);
-        System.out.println("It look terrible but anyway, at least we can jump in");
+        System.out.println("Alright, there is your team : " + listOfHeroClassNames.toString().replace("[", "").replace("]", "") );
+        System.out.println("Your team look terrible but anyway, at least we can jump in.");
     }
 
-    public void settingUpHeroClass(int choiceAnswer) {
-        heroClassList = new ArrayList<>();
+    public void settingUpHeroClass(int choiceAnswer, int heroNumber) {
         switch (choiceAnswer) {
             case 1 -> {
                 Warrior warrior = new Warrior();
-                heroClassList.add("Warrior");
-                System.out.println("So this hero will be a warrior !");
+                warrior.setHeroNumber(heroNumber);
+                warrior.attack = 1.6;
+                warrior.defense = 0.80;
+                warrior.lifePoints = 100 ;
+                warrior.speed = 40;
+                listOfHeroClassNames.add(warrior.CombatantName);
+                listOfWarriorsHeros.add(warrior);
+                System.out.println("Boooom! Hero number " + heroNumber + " is now a warrior");
             }
             case 2 -> {
                 Hunter hunter = new Hunter();
-                heroClassList.add("Hunter");
-                System.out.println("So this hero will be a hunter !");
+                hunter.attack = 1.3;
+                hunter.defense = 0.90;
+                hunter.lifePoints = 135;
+                hunter.speed = 75 ;
+                hunter.setHeroNumber(heroNumber);
+                listOfHeroClassNames.add(hunter.CombatantName);
+                listOfHunterHeros.add(hunter);
+                System.out.println("And snap ! Hero number " + heroNumber + " is now a hunter");
             }
             case 3 -> {
                 Mage mage = new Mage();
-                heroClassList.add("Mage");
-                System.out.println("So this hero will be a mage !");
+                mage.attack = 1.1;
+                mage.defense = 0.65;
+                mage.lifePoints = 125;
+                mage.speed = 50;
+                mage.setHeroNumber(heroNumber);
+                listOfHeroClassNames.add(mage.CombatantName);
+                listOfMageHeros.add(mage);
+                System.out.println("Fiouff ! Hero number " + heroNumber + " is now a mage");
             }
             case 4 -> {
                 Healer healer = new Healer();
-                heroClassList.add("Healer");
-                System.out.println("So this hero will be a healer !");
+                healer.attack = 1;
+                healer.defense = 0.90;
+                healer.lifePoints = 80;
+                healer.speed = 45;
+                healer.setHeroNumber(heroNumber);
+                listOfHeroClassNames.add(healer.CombatantName);
+                listOfHealerHeros.add(healer);
+                System.out.println("Wooaaa ! Hero number " + heroNumber + " is now a healer");
             }
         }
         System.out.println();
     }
+    public void creatingEnemiesWave(){
+        difficultyCoef++;
+        for (int enemyNumber =  1 ; enemyNumber <= numberOfHerosInput; enemyNumber++) {
+            Enemy enemy = new Enemy();
+            enemy.setEnemyNumber(enemyNumber);
+            enemy.attack = roundADouble(randomDouble(0.5, 0.7)*difficultyCoef);
+            enemy.defense = roundADouble( 1 - (randomDouble(0.065, 0.11)*difficultyCoef));
+            enemy.lifePoints = randomInt(50, 75)*Math.max(1,difficultyCoef/2);
+            enemy.speed = randomInt(20, 40)*difficultyCoef;
+            listOfEnemies.add(enemy);
+        }
+        System.out.println("Well, " + nameOfThePlayer + " you'll have 5 waves of enemies to beat before challenging the boss mouhahahahaaha");
+    }
+
+    public int randomInt(int min, int max) {
+        return ThreadLocalRandom.current().nextInt(min, max + 1);
+    }
+    public double randomDouble(double min, double max) {
+        return ThreadLocalRandom.current().nextDouble(min, max);
+    }
+    public double roundADouble(double value){
+        value *= 100;
+        value = Math.round(value);
+        value /= 100;
+        return value;
+    }
 }
 
-abstract class Combatant {
-    public String CombatantName;
-    public int CombatantLifePoints;
-    public int CombatantAttack;
-    public int CombatantDefense;
+abstract class Combatant extends Game {
+    public String name;
+    public int lifePoints;
+    public double attack;
+    public double defense; // The lower the better (between 0 and 1)
+    public int speed; // The higher the better (between 0 and 100)
 
 }
 
 class Enemy extends Combatant {
+    private int enemyNumber;
 
+    public int getEnemyNumber() {
+        return enemyNumber;
+    }
+
+    public void setEnemyNumber(int enemyNumber) {
+        this.enemyNumber = enemyNumber;
+    }
 }
 
 abstract class Hero extends Combatant {
     public String heroExperienceLevel;
+    private int heroNumber;
+    public int getHeroNumber() {
+        return heroNumber;
+    }
+
+    public void setHeroNumber(int heroNumber) {
+        this.heroNumber = heroNumber;
+    }
 }
 
 class Warrior extends Hero {
-    public int WarriorAttackBonusPoints;
+    String CombatantName = "Warrior";
+
 }
 
 class Hunter extends Hero {
-    public int HunterArrowsNumber;
+    String CombatantName = "Hunter";
+    public int HunterArrowsNumber = 15;
 }
 
 class Mage extends Hero {
-    public int mageManaPoints;
+    String CombatantName = "Mage";
+    public int mageManaPoints = 10;
 }
 
 class Healer extends Hero {
-    public int healerDefenseBonusPoints;
+    String CombatantName = "Healer";
+    public int healerDefenseBonusPoints = 5;
 }
 
 abstract class Item {
