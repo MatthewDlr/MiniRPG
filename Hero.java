@@ -1,9 +1,6 @@
 public class Hero extends Combatant {
         public String heroExperienceLevel;
-        private int heroNumber;
-        public int getHeroNumber() {
-            return heroNumber;
-        }
+        public int heroNumber;
 
     public void setHeroNumber(int heroNumber) {
             this.heroNumber = heroNumber;
