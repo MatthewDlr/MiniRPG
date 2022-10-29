@@ -8,7 +8,7 @@ public class AskUserForInput {
         int userInput = 0;
         do {
             isInputCorrect = true;
-            Scanner scanner = new Scanner(System.in);
+            Scanner scanner = new Scanner(System.in); 
             try {
                 userInput = scanner.nextInt();
             } catch (Exception e) {

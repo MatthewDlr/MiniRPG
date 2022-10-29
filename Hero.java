@@ -7,22 +7,30 @@ public class Hero extends Combatant {
         }
 }
 
-class Warrior extends Hero {
-    String CombatantName = "Warrior";
+class Warrior extends Hero  {
+    public String talent = "Last Power";
+    public String talentDescription = "When his life is under 25%, his attack is increased by 20%";
+
+        
+
 
 }
 
 class Hunter extends Hero {
-    String CombatantName = "Hunter";
-    public int HunterArrowsNumber = 15;
+    public int HunterArrowsNumber = 10;
+    public String talent = "Brave Bow";
+    public String talentDescription = "When his life is full, arrows are not used ";
 }
 
+
 class Mage extends Hero {
-    String CombatantName = "Mage";
-    public int mageManaPoints = 10;
+    public int souls = 10;
+    public String talent = "Soul gathering";
+    public String talentDescription = "Damaging enemies produce a small amount of souls";
+
 }
 
 class Healer extends Hero {
-    String CombatantName = "Healer";
-    public int healerDefenseBonusPoints = 5;
+    public String talent = "Self Help";
+    public String talentDescription = "Life is increased by 5% if no damages are received";
 }

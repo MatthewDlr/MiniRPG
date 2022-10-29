@@ -6,4 +6,5 @@ public class Combatant extends Game {
     public Integer speed; // The higher the better (between 0 and 100)
 
 
+
 }

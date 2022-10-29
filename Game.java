@@ -4,12 +4,8 @@ import java.util.*;
 public class Game {
     public String nameOfThePlayer;
     public int numberOfHerosInput;
-    public int difficultyCoef = 0;
+    public double difficultyCoef = 0.47;
     public List<Combatant> listOfAllHeros = new ArrayList<>();
-    public List<Warrior> listOfWarriorsHeros = new ArrayList<>();
-    public ArrayList<Healer> listOfHealerHeros = new ArrayList<>();
-    public ArrayList<Mage> listOfMageHeros = new ArrayList<>();
-    public ArrayList<Hunter> listOfHunterHeros = new ArrayList<>();
     public ArrayList<Enemy> listOfEnemies = new ArrayList<>();
 
     public FightInstance fight;
@@ -25,6 +21,11 @@ public class Game {
         this.fight = new FightInstance();
         fight.creatingEnemiesWave(this);
         fight.gatheringAliveHerosAndMonster(this);
+        fight.sortingCombatantsBySpeed();
+    }
+
+    public void fightEngine(){
+
     }
 
     public void askUserHisName() {
@@ -38,7 +39,7 @@ public class Game {
 
         System.out.println();
     }
-
+    
     public void askUserTheNumberOfHero() {
         System.out.println("Oh, " + nameOfThePlayer + " ! Yeah I remember you now.");
         System.out.print("And... ahem, how many hero are going to fight by your side ? ");
@@ -66,54 +67,57 @@ public class Game {
             }
             settingUpHeroClass(userInput, heroNumber);
         }
-        System.out.println("Alright, there is your team : " + listOfAllHeros.toString().replace("[", "").replace("]", "") );
-        System.out.println("Your team look terrible but anyway, at least we can jump in.");
+        System.out.print("Alright, there is your team : ");
+        for(Combatant combatant: listOfAllHeros){
+            System.out.print(combatant.name + ", ");
+        }
+        System.out.println("\nYour team look terrible but anyway, at least we can jump in.");
     }
 
     public void settingUpHeroClass(int choiceAnswer, int heroNumber) {
         switch (choiceAnswer) {
             case 1 -> {
                 Warrior warrior = new Warrior();
+                warrior.name = "Warrior";
                 warrior.setHeroNumber(heroNumber);
                 warrior.attack = 1.6;
                 warrior.defense = 0.80;
                 warrior.lifePoints = 100 ;
                 warrior.speed = 40;
                 this.listOfAllHeros.add(warrior);
-                listOfWarriorsHeros.add(warrior);
                 System.out.println("Boooom! Hero number " + heroNumber + " is now a warrior");
             }
             case 2 -> {
                 Hunter hunter = new Hunter();
+                hunter.name = "Hunter";
                 hunter.attack = 1.3;
                 hunter.defense = 0.90;
                 hunter.lifePoints = 135;
                 hunter.speed = 75 ;
                 hunter.setHeroNumber(heroNumber);
                 listOfAllHeros.add(hunter);
-                listOfHunterHeros.add(hunter);
                 System.out.println("And snap ! Hero number " + heroNumber + " is now a hunter");
             }
             case 3 -> {
                 Mage mage = new Mage();
+                mage.name = "Mage";
                 mage.attack = 1.1;
                 mage.defense = 0.65;
                 mage.lifePoints = 125;
                 mage.speed = 50;
                 mage.setHeroNumber(heroNumber);
                 listOfAllHeros.add(mage);
-                listOfMageHeros.add(mage);
                 System.out.println("Fiouff ! Hero number " + heroNumber + " is now a mage");
             }
             case 4 -> {
                 Healer healer = new Healer();
+                healer.name = "Healer";
                 healer.attack = 1;
                 healer.defense = 0.90;
                 healer.lifePoints = 80;
                 healer.speed = 45;
                 healer.setHeroNumber(heroNumber);
                 listOfAllHeros.add(healer);
-                listOfHealerHeros.add(healer);
                 System.out.println("Wooaaa ! Hero number " + heroNumber + " is now a healer");
             }
             default -> throw new IllegalStateException("Unexpected value: " + choiceAnswer);
