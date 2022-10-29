@@ -11,8 +11,6 @@ class Warrior extends Hero  {
     public String talent = "Last Power";
     public String talentDescription = "When his life is under 25%, his attack is increased by 20%";
 
-        
-
 
 }
 
