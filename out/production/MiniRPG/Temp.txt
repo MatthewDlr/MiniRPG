@@ -1,0 +1,18 @@
+/*
+
+WARRIOR ATTACK
+warrior.speed *= (double) WarriorAttacks.attack.get(6); // 6 = Speed modification
+if ((double) WarriorAttacks.attack.get(6) < 1) System.out.println("Your Warrior speed has decreased");
+
+warrior.attack *= (double) WarriorAttacks.attack.get(5); // 5 = Attack modification
+if ((double) WarriorAttacks.attack.get(5) < 1) System.out.println("Your Warrior attack has decreased");
+else if ((double) WarriorAttacks.attack.get(5) > 1) System.out.println("Your Warrior attack has increased");
+
+warrior.defense *= (double) WarriorAttacks.attack.get(4); // 4 = Defense modification
+if ((double) WarriorAttacks.attack.get(4) < 1) System.out.println("Your Warrior defense has decreased");
+
+int targets = (Integer) WarriorAttacks.attack.get(3);
+int damages = (Integer) WarriorAttacks.attack.get(2);
+
+TEXT FORMAT
+"\033[0;1m"

@@ -5,41 +5,55 @@ public class Attack {
 }
 
 final class WarriorAttacks extends Attack{
-    //Attack Model :                                                  Name         , Description                    , Damage, Targets nb, Defense boost, Atk boost, Speed boost
-    static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Sword cut"   , "Attack the enemy with a sword", 40    ,  1        , 1            , 1        , 1           ));
-    static ArrayList<Object> attack2 = new ArrayList<>(Arrays.asList("Swords Dance", "Highly Increase the attack"   , 0     ,  0        , 1            , 1.2      , 1           ));
-    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Wide Strike" , "Attack all the enemies"       , 10    ,  5        , 1            , 1        , 1           ));
-    static ArrayList<Object> attack4 = new ArrayList<>(Arrays.asList("MAX Sword"   , "Attack with the maximum power", 60    ,  1        , 0.8          , 0.8      , 0.8         ));
-    //                                                                                                                                  ------------  1 = no change ------------
-    //                                                                                                                                  ------------  < 1 = decrease -----------
-    //                                                                                                                                  ------------  > 1 = increase -----------
+    static ArrayList<Object> nextAttack = new ArrayList<>();
+    //Attack Model :                                                  Name         , Description                                                                               , Damage, Targets nb, Defense change, Atk change, Speed change
+    static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Sword cut"   , "Attack the enemy with the sword"                                                         , 40    ,  1        , 1d            , 1d        , 1d           ));
+    static ArrayList<Object> attack2 = new ArrayList<>(Arrays.asList("Swords Dance", "Highly increase the attack of the Warrior"                                               , 0     ,  0        , 1d            , 1.2d      , 1d           ));
+    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Wide Strike" , "Attack all the enemies at once"                                                          , 10    ,  5        , 1d            , 1d        , 1d           ));
+    static ArrayList<Object> attack4 = new ArrayList<>(Arrays.asList("Close Combat", "Rally all the Warrior power to attack, decrease the attack, defense and speed in return.", 60    ,  1        , 0.9d          , 0.9d      , 0.9         ));
+    //                                                                                                                                                                                              ------------  1 = no change ------------
+    //                                                                                                                                                                                              ------------  < 1 = decrease -----------
+    //                                                                                                                                                                                              ------------  > 1 = increase -----------
 }
 
 final class HunterAttacks extends Attack{
-    //Attack Model :                                                 Name             ,Description                     , Damage, Targets nb, Arrow cost, Priority?, Defense boost, Atk boost, Speed boost
-    static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Quick Attack"   , "Always attack in first"       , 35    ,  1        , 0         , 1        , 1            , 1        , 1           ));
-    static ArrayList<Object> attack2 = new ArrayList<>(Arrays.asList("X Bow"          , "Attack using the bow "        , 50    ,  1        , 1         , 0        , 1            , 1        , 1           ));
-    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Arrow Rain"     , "toutch multiple target"       , 20    ,  2        , 2         , 0        , 1            , 1        , 1           ));
-    static ArrayList<Object> attack4 = new ArrayList<>(Arrays.asList("Hone Caws"      , "Increase speed and attack"    , 0     ,  0        , 0         , 0        , 1            , 1.1      , 1.1         ));
-    //                                                                                                                                                 | 1 = yes  | ------------  1 = no change ------------
-    //                                                                                                                                                 | 0 = no   | ------------  < 1 = decrease -----------
-    //                                                                                                                                                            | ------------  > 1 = increase -----------
+    static ArrayList<Object> nextAttack = new ArrayList<>();
+    //Attack Model :                                                 Name             ,Description                                     , Damage, Targets nb, Arrow cost, Defense change, Atk change, Speed change
+    static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Quick Attack"   , "Basic attack without arrows needed"           , 35    ,  1        , 0         , 1d            , 1d        , 1d           ));
+    static ArrayList<Object> attack2 = new ArrayList<>(Arrays.asList("X Bow"          , "Shoot a big arrow to an enemy "               , 50    ,  1        , 1         , 1d            , 1d        , 1d           ));
+    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Arrow Rain"     , "Shoot many arrows to touch multiple targets"  , 20    ,  2        , 2         , 1d            , 1d        , 1d           ));
+    static ArrayList<Object> attack4 = new ArrayList<>(Arrays.asList("Hone Caws"      , "Increase speed and attack of the Hunter"      , 0     ,  0        , 0         , 1d            , 1.1d      , 1.1d         ));
+    //                                                                                                                                                                 | ------------  1 = no change ------------
+    //                                                                                                                                                                 | ------------  < 1 = decrease -----------
+    //                                                                                                                                                                 | ------------  > 1 = increase -----------
 }
     
 final class MageAttacks extends Attack{
-    //Attack Model :                                                 Name            ,Description                         , Damage, Targets nb, Soul cost, Soul Boost, Defense boost, Atk boost, Speed boost
-    static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Shadow Sneak"  , "Attack from behind"               , 30   ,  1         , 0        , 0        , 1             ));
-    static ArrayList<Object> attack2 = new ArrayList<>(Arrays.asList("Souls focus"   , "Focus on gathering more souls"    , 0    ,  0         , 0        , 1.1      , 1             ));
-    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Souls power"   , "Increase the defense of the team" , 0    ,  4         , 20       , 0        , 1.15          ));
-    static ArrayList<Object> attack4 = new ArrayList<>(Arrays.asList("Final Shout"   , "Gathering all the souls to attack", "-"  ,  1         , 999      , 0        , 1             ));
-    //                                                                                                                                                   | ---- < 1 = decrease ----
-    //                                                                                                                                                   | ---- > 1 = increase ----
+    static ArrayList<Object> nextAttack = new ArrayList<>();
+    //Attack Model :                                                 Name            ,Description                                                                          , Damage, Targets nb, Soul cost, Soul change, Defense change
+    static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Shadow Sneak"  , "Attack an Enemy from behind"                                                       , 30   ,  1         , 0        , 1d         , 1d             ));
+    static ArrayList<Object> attack2 = new ArrayList<>(Arrays.asList("Souls focus"   , "Focus on increasing the current number of souls"                                   , 0    ,  0         , 0        , 1.20d      , 1d             ));
+    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Souls Guard"   , "Increase the defense of the team"                                                  , 0    ,  4         , 20       , 1d         , 1.10d          ));
+    static ArrayList<Object> attack4 = new ArrayList<>(Arrays.asList("Final Shout"   , "Gathering all the souls to attack with (the damages depend of the number of souls)", 99   ,  1         , 999      , 1d         , 1d             ));
+    //                                                                                                                                                                                                    | ---- < 1 = decrease ----
+    //                                                                                                                                                                                                    | ---- > 1 = increase ----
 }
 
 final class HealerAttacks extends Attack{
-    //Attack Model :                                                 Name           ,Description                         , Damage, Targets nb , Heal
-    static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Charge"       , "Basically charge on the enemy"    , 30    ,  1         , 0    ));
-    static ArrayList<Object> attack2 = new ArrayList<>(Arrays.asList("Protect"      , "Protect from damages"             , 0     ,  0         , 0    ));
-    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Giga Drain"   , "Convert enemy life to heal"       , 20    ,  1         , "-"  ));
-    static ArrayList<Object> attack4 = new ArrayList<>(Arrays.asList("Heal Wave"    , "Heal the team a little "          , 0     ,  4         , 15   ));
+    static ArrayList<Object> nextAttack = new ArrayList<>();
+    //Attack Model :                                                 Name           ,Description                                                     , Damage , Targets nb , Heal
+    static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Charge"       , "Basically charge on the enemy"                                , 30     ,  1         , 0    ));
+    static ArrayList<Object> attack2 = new ArrayList<>(Arrays.asList("Protect"      , "Protect the healer from received damages"                     , 0      ,  0         , 0    ));
+    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Giga Drain"   , "Attack an enemy and convert a small part of damages to heal"  , 20     ,  1         , 0  ));
+    static ArrayList<Object> attack4 = new ArrayList<>(Arrays.asList("Heal Wave"    , "Heal the team a little "                                      , 0      ,  4         , 15   ));
+}
+
+final class EnemyAttacks extends Attack{
+    static ArrayList<Object> attack = new ArrayList<>();
+    //                                                               Name         ,Damage , Targets nb , Opponent Defense change , Attack change
+    static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Charge"     , 30    , 1          , 1d                      , 1d            ));
+    static ArrayList<Object> attack2 = new ArrayList<>(Arrays.asList("Creaking"   , 0     , 5          , 0.95d                   , 1d            ));
+    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Work up"    , 0     , 0          , 1d                      , 1.1d          ));
+    static ArrayList<Object> attack4 = new ArrayList<>(Arrays.asList("Fury Attack", 15    , 1          , 1d                      , 1d            ));
+
 }

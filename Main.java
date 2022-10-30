@@ -3,5 +3,6 @@ public class Main {
         Game game = new Game();
         game.initializeGame();
         game.initializeFight();
+        game.playFight();
     }
 }
