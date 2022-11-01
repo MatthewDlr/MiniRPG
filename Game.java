@@ -28,7 +28,6 @@ public class Game {
     }
 
     public void playFight() {
-        fight.printCombatantOrder();
         fight.fightEngine();
     }
 
@@ -59,6 +58,7 @@ public class Game {
     }
 
     public void askUserTheClassOfHeros() {
+        System.out.println("It's time to chose which heroes are going with you ?");
         System.out.println(" 1/ Warrior   Talent: Last Power      (When his life is under 25%, his attack is increased by 20%)");
         System.out.println(" 2/ Hunter    Talent: Brave Bow       (When his life is full, arrows are not used) ");
         System.out.println(" 3/ Mage      Talent: Soul gathering  (Damaging enemies produce a small amount of souls)");

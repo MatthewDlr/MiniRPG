@@ -24,8 +24,9 @@ public class AskUserForInput {
         return userInput;
     }
 
-public static String askAString() {
+    public static String askAString() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
+
 }
