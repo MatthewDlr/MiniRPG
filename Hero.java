@@ -1,3 +1,5 @@
+import java.util.*;
+
 public abstract class Hero extends Combatant {
         static public String heroExperienceLevel;
         public String talent;
@@ -5,6 +7,7 @@ public abstract class Hero extends Combatant {
 }
 
 class Warrior extends Hero  {
+    public int maximumLifePoints;
 
 }
 
@@ -17,10 +20,9 @@ class Hunter extends Hero {
 class Mage extends Hero {
     public int numberOfSouls ;
 
-
-
 }
 
 class Healer extends Hero {
+
 
 }

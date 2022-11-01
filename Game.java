@@ -89,6 +89,7 @@ public class Game {
                 warrior.attack = 1.6;
                 warrior.defense = 0.80;
                 warrior.lifePoints = 100;
+                warrior.maximumLifePoints = 100;
                 warrior.speed = 40;
                 warrior.talent = "Last Power";
                 warrior.talentDescription = "When his life is under 25%, his attack is increased by 20%";
