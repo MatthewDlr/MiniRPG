@@ -7,12 +7,11 @@ public abstract class Hero extends Combatant {
 }
 
 class Warrior extends Hero  {
-    public int maximumLifePoints;
 
 }
 
 class Hunter extends Hero {
-    public int maximumLifePoints;
+
     public int arrowsNumber ;
 }
 
@@ -23,6 +22,7 @@ class Mage extends Hero {
 }
 
 class Healer extends Hero {
+    public int currentLifePoints;
 
 
 }

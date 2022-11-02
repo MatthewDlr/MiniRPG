@@ -117,6 +117,7 @@ public class Game {
                 mage.attack = 1.1;
                 mage.defense = 0.65;
                 mage.lifePoints = 125;
+                mage.maximumLifePoints = 125 ;
                 mage.speed = 50;
                 mage.numberOfSouls = 20;
                 mage.talent = "Soul gathering";
@@ -131,6 +132,8 @@ public class Game {
                 healer.attack = 1;
                 healer.defense = 0.90;
                 healer.lifePoints = 80;
+                healer.maximumLifePoints = 80;
+                healer.currentLifePoints = 0 ;
                 healer.speed = 45;
                 healer.talent = "Self Help";
                 healer.talentDescription = "Life points are increased by 10% if no damages are received during a turn";
