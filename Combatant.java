@@ -9,5 +9,5 @@ public class Combatant extends Game {
     public int combatantID;
 
     ArrayList<Object> nextAttack = new ArrayList<>();
-    String nextTargets ;
+    int nextTargets ;
 }

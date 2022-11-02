@@ -49,7 +49,7 @@ final class EnemyAttacks extends Attack{
     static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Charge"      ,"" , 30   , 1           , 1d                      , 1d            , 1d                    ));
     static ArrayList<Object> attack2 = new ArrayList<>(Arrays.asList("Creaking"    ,"", 0     , 5           , 0.95d                   , 1d            , 0.90d                 ));
     static ArrayList<Object> attack2b = new ArrayList<>(Arrays.asList("Stick Web"  ,"", 15    , 1           , 1d                      , 1d            , 0.90d                 ));
-    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Work up"     ,"", 0     , 0           , 1d                      , 1.1d          , 1d                    ));
+    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Work up"     ,"", 0     , 0           , 1d                      , 1.15d         , 1d                    ));
     static ArrayList<Object> attack4 = new ArrayList<>(Arrays.asList("Fury Attack" ,"", 15    , 1           , 1d                      , 1d            , 1d                    ));
 
 }

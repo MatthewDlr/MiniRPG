@@ -7,6 +7,7 @@ public class FightInstance {
     public ArrayList<Combatant> listOfHerosInFight = new ArrayList<>();
     public ArrayList<Enemy> listOfEnemiesInFight = new ArrayList<>();
     int range = 3;
+    int name = 0;
     int damage = 2;
 
     public void creatingEnemiesWave(Game game) {
@@ -59,9 +60,10 @@ public class FightInstance {
     public void printCombatantOrder() {
         int number = 1;
         out.println("\n---------------------------------------------------------------------------------------------------");
-        out.println("Here is the order in which the Combatants are going to attack this tour \n(ordered by combatant speed and heroes with prioritized attacks in first)");
+        out.println("Here is the order in which the Combatants are going to attack this tour \n(Ordered by combatant's speed and heroes with prioritized attacks)");
         for (Combatant combatant : listOfCombatantsInFight) {
-            out.println(number + ": " + combatant.name);
+            if (number == 10) out.println(number + ": " + combatant.name);
+            else out.println(number + " : " + combatant.name);
             number++;
         }
         out.println("Press enter to continue");
@@ -73,8 +75,8 @@ public class FightInstance {
         out.println("Turn: " + turn);
         out.println("------------------------------------------------------------------------------------------------------\n");
 
-        for (Combatant combatant : listOfCombatantsInFight){
-            switch (combatant.name) {   
+        for (Combatant combatant : listOfCombatantsInFight) {
+            switch (combatant.name) {
                 case "Enemy" -> enemyAttackAI((Enemy) combatant);
                 case "Warrior" -> askUserForWarriorAttack((Warrior) combatant);
                 case "Hunter" -> askUserforHunterAttack((Hunter) combatant);
@@ -84,36 +86,93 @@ public class FightInstance {
         }
         prioritizeEligibleHeros();
         printCombatantOrder();
-        //printCombatantsLife();
-
+        for (Combatant combatant : listOfCombatantsInFight) {
+            performAttacks(combatant);
+            out.println("Press enter to continue");
+            AskUserForInput.askAString();
+        }
+        printCombatantsLife();
 
     }
 
-    public void prioritizeEligibleHeros(){
+    public void performAttacks(Combatant combatant) {
 
-        int i = 0 ;
-        for (Combatant hero : listOfHerosInFight){
-            if (hero.name.equals("Hunter") && hero.nextAttack.get(0).equals("Quick Attack")){
+        out.println("\n" + combatant.name + " " + combatant.combatantID + " is using " + combatant.nextAttack.get(name));
+
+        if ((int) combatant.nextAttack.get(damage) == 0) {
+            if (combatant.name.equals("Warrior")) {
+                combatant.attack *= 1.2;
+                out.println("Your " + combatant.name + " " + combatant.combatantID + "'s attack has highly increased");
+                return;
+            }
+            if (combatant.name.equals("Hunter")) {
+                combatant.attack *= 1.1;
+                combatant.speed *= 1.1;
+                out.println("Your " + combatant.name + " " + combatant.combatantID + "'s attack and speed have slightly increased");
+                return;
+            }
+            if (combatant.name.equals("Mage")) {
+                Mage mage = (Mage) combatant;
+                if ((int) combatant.nextAttack.get(range) == 0){
+                    mage.numberOfSouls *= 1.2;
+                    out.println("Your " + combatant.name + " " + combatant.combatantID + "'s souls have highly increased");
+                } else {
+                    for (Combatant hero : listOfHerosInFight){
+                        hero.defense *= 1.10 ;
+                    }
+                    out.println("Your team's defense has slightly increased");
+                }
+                return;
+            }
+            if (combatant.name.equals("Healer")){
+                if ((int) combatant.nextAttack.get(range) == 0) out.println("Your " + combatant.name + " " + combatant.combatantID + " is being protected from damages");
+                else {
+                    for (Combatant hero : listOfHerosInFight){
+                        hero.lifePoints += 15 ;
+                    }
+                    out.println("Your team's life has increased");
+                }
+                return;
+            }
+            if (combatant.name.equals("Enemy")){
+                if ((int) combatant.nextAttack.get(range) == 0){
+                    combatant.attack *= 1.15 ;
+                    out.println("The " + combatant.name + " " + combatant.combatantID + "'s attack has increased");
+                } else {
+                    for (Combatant hero : listOfHerosInFight){
+                        hero.defense *= 0.95 ;
+                        hero.speed *= 0.90 ;
+                    }
+                    out.println("Your team's defense has slightly decreased");
+                    out.println("Your team's speed has decreased");
+                }
+                return;
+            }
+        }
+
+    }
+
+    public void prioritizeEligibleHeros() {
+
+        int i = 0;
+        List<Combatant> copyOflistOfHerosInFight = new ArrayList<>(listOfCombatantsInFight);
+        for (Combatant hero : copyOflistOfHerosInFight) {
+            if (hero.name.equals("Hunter") && hero.nextAttack.get(name).equals("Quick Attack")) {
                 listOfCombatantsInFight.remove(i);
 
-                int y = 0 ;
-                while (listOfCombatantsInFight.get(y).name.equals("Healer")){
+                int y = 0;
+                while (listOfCombatantsInFight.get(y).name.equals("Healer")) {
                     y++;
                 }
                 listOfCombatantsInFight.add(y, hero);
             }
 
-            if (hero.name.equals("Healer") && hero.nextAttack.get(0).equals("Protect")){
+            if (hero.name.equals("Healer") && hero.nextAttack.get(name).equals("Protect")) {
                 listOfCombatantsInFight.remove(i);
                 listOfCombatantsInFight.add(0, hero);
             }
             i++;
         }
-    }
-
-    public void performAttacks(Combatant combatant){
-
-
     }
 
 
@@ -156,14 +215,14 @@ public class FightInstance {
             case 4 -> warrior.nextAttack = WarriorAttacks.attack4;
         }
 
-        if (LastPower) warrior.nextAttack.set(2, (int) warrior.nextAttack.get(2) * 1.20 );
+        if (LastPower) warrior.nextAttack.set(damage, (int) warrior.nextAttack.get(damage) * 1.20);
 
         out.println("Your Warrior's " + warrior.combatantID + " move is " + warrior.nextAttack.get(0)); // 0 = Name of the attack
 
         // Asking for targets
         if ((Integer) warrior.nextAttack.get(range) >= listOfEnemiesInFight.size()) {
             out.println("All the enemies will be attacked");
-            warrior.nextTargets = "All";
+            warrior.nextTargets = 5;
 
         } else if ((Integer) warrior.nextAttack.get(range) == 1) {
             out.println();
@@ -178,10 +237,10 @@ public class FightInstance {
                 userChoice = AskUserForInput.askAnInt();
             } while (userChoice < 1 || userChoice > listOfEnemiesInFight.size());
 
-            warrior.nextTargets = "" + userChoice + "";
+            warrior.nextTargets = userChoice;
             out.println("Got it, Enemy " + userChoice + " will be attacked");
         } else {
-            warrior.nextTargets = "0";
+            warrior.nextTargets = 0;
         }
         out.println("\n");
     }
@@ -231,7 +290,7 @@ public class FightInstance {
         // Asking for targets
         if ((Integer) hunter.nextAttack.get(range) >= listOfEnemiesInFight.size()) {
             out.println("All the enemies will be attacked");
-            hunter.nextTargets = "All";
+            hunter.nextTargets = 5;
 
         } else if ((Integer) hunter.nextAttack.get(range) == 1) {
             out.println();
@@ -246,10 +305,10 @@ public class FightInstance {
                 userChoice = AskUserForInput.askAnInt();
             } while (userChoice < 1 || userChoice > listOfEnemiesInFight.size());
 
-            hunter.nextTargets = "" + userChoice + "";
+            hunter.nextTargets = userChoice;
             out.println("Got it, Enemy " + userChoice + " will be attacked");
         } else {
-            hunter.nextTargets = "0";
+            hunter.nextTargets = 0;
         }
         out.println("\n");
     }
@@ -304,11 +363,11 @@ public class FightInstance {
                 out.print("Which enemy do you want to attack ? ");
                 userChoice = AskUserForInput.askAnInt();
             } while (userChoice < 1 || userChoice > listOfEnemiesInFight.size());
-            mage.nextTargets = "" + userChoice + "";
+            mage.nextTargets = userChoice;
             out.println("Got it, Enemy " + userChoice + " will be attacked");
 
         } else {
-            mage.nextTargets = "" + mage.nextAttack.get(range) + "";
+            mage.nextTargets = (int) mage.nextAttack.get(range);
         }
 
         out.println("\n");
@@ -348,11 +407,11 @@ public class FightInstance {
                 out.print("Which enemy do you want to attack ? ");
                 userChoice = AskUserForInput.askAnInt();
             } while (userChoice < 1 || userChoice > listOfEnemiesInFight.size());
-            healer.nextTargets = "" + userChoice + "";
+            healer.nextTargets = userChoice;
             out.println("Got it, Enemy " + userChoice + " will be attacked");
 
         } else {
-            healer.nextTargets = "" + healer.nextAttack.get(range) + "";
+            healer.nextTargets = (int) healer.nextAttack.get(range);
         }
         out.println("\n");
     }
@@ -368,6 +427,15 @@ public class FightInstance {
             }
             case 3 -> enemy.nextAttack = EnemyAttacks.attack3;
             case 4 -> enemy.nextAttack = EnemyAttacks.attack4;
+        }
+
+        if ((int) enemy.nextAttack.get(range) == 0) {
+            enemy.nextTargets = 0;
+
+        } else if ((int) enemy.nextAttack.get(range) == 5) {
+            enemy.nextTargets = 5;
+        } else {
+            enemy.nextTargets = UsefulFunctions.randomInt(1, listOfHerosInFight.size());
         }
     }
 }
