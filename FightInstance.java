@@ -9,9 +9,10 @@ public class FightInstance {
     int range = 3;
     int name = 0;
     int damage = 2;
+    boolean isFightWon ;
 
     public void creatingEnemiesWave(Game game) {
-        game.difficultyCoef += 0.13;
+        game.difficultyCoef += 0.15;
         int id = 0;
         for (Combatant hero : game.listOfHeros) {
             id++;
@@ -30,7 +31,6 @@ public class FightInstance {
 
             listOfEnemiesInFight.add(enemy);
         }
-        out.println("Well, " + game.nameOfThePlayer + " you'll have 5 waves of enemies to beat before challenging the boss mouhahahahaaha");
         out.print("Press any key to continue");
         AskUserForInput.askAString();
     }
@@ -91,17 +91,12 @@ public class FightInstance {
                     case "Healer" -> askUserForHealerAttack((Healer) combatant);
                 }
             }
+            sortingCombatantsBySpeed();
             prioritizeEligibleHeros();
             printCombatantOrder();
 
             for (Combatant combatant : listOfCombatantsInFight) {
                 performAttacks(combatant);
-
-                for (Combatant combatant1 : listOfCombatantsInFight) {
-                    if (combatant1.lifePoints <= 0) {
-                        out.println(combatant1.name + " " + combatant1.combatantID + " is not able to fight anymore :/\n");
-                    }
-                }
 
                 out.print("Press enter to continue");
                 AskUserForInput.askAString();
@@ -110,22 +105,21 @@ public class FightInstance {
             printCombatantsLife();
             if (listOfEnemiesInFight.size() == 0 || listOfHeroesInFight.size() == 0) isFightOver = true;
         }
-        out.println("------------------------------------------------------------------------------------------------------\n");
-        out.println("Well done challenger, you just win your fight !");
-        out.print("Press enter to continue");
-        AskUserForInput.askAString();
-        out.println("------------------------------------------------------------------------------------------------------\n");
+        isFightWon = listOfHeroesInFight.size() != 0;
     }
 
     public void removingDeadCombatant() {
-        for (Combatant hero : listOfHeroesInFight) {
+        ArrayList<Combatant> copyOflistOfEnemiesInFight = new ArrayList<>(listOfEnemiesInFight);
+        ArrayList<Combatant> copyOflistOfHeroesInFight = new ArrayList<> (listOfHeroesInFight);
+
+        for (Combatant hero : copyOflistOfHeroesInFight) {
             if (hero.lifePoints <= 0) {
                 listOfCombatantsInFight.remove(hero);
                 listOfHeroesInFight.remove(hero);
                 out.println("\nYour " + hero.name + " " + hero.combatantID + " is not able to fight anymore :/\n");
             }
         }
-        for (Combatant enemy : listOfEnemiesInFight) {
+        for (Combatant enemy : copyOflistOfEnemiesInFight) {
             if (enemy.lifePoints <= 0) {
                 listOfCombatantsInFight.remove(enemy);
                 listOfEnemiesInFight.remove(enemy);
@@ -136,7 +130,10 @@ public class FightInstance {
 
     public void performAttacks(Combatant combatant) {
 
-        if (combatant.lifePoints <= 0) return;
+        if (combatant.lifePoints <= 0) {
+            out.println("\n" + combatant.name + " " + combatant.combatantID + " is not able to fight anymore :/\n");
+            return;
+        }
 
         out.println("\n" + combatant.name + " " + combatant.combatantID + " is using " + combatant.nextAttack.get(name));
 
@@ -158,10 +155,11 @@ public class FightInstance {
                     mage.numberOfSouls *= 1.2;
                     out.println("Your Mage " + combatant.combatantID + "'s souls increased from " + mage.numberOfSouls * 0.8 + " to " + mage.numberOfSouls);
                 } else {
+                    mage.numberOfSouls -= 20 ;
                     for (Combatant hero : listOfHeroesInFight) {
-                        hero.defense *= 1.10;
+                        hero.defense *= 1.20;
                     }
-                    out.println("Your team's defense has slightly increased");
+                    out.println("Your team's defense has increased");
                 }
                 return;
             }
@@ -215,14 +213,14 @@ public class FightInstance {
 
                     if (combatant.nextAttack.get(name).equals("Final Shout")) {
                         Mage mage = (Mage) combatant;
-                        inflictedDamages = (int) (mage.numberOfSouls * 2 * mage.attack * target.defense);
+                        inflictedDamages = (int) (mage.numberOfSouls * 3 * mage.attack * target.defense);
                         mage.numberOfSouls = 0;
 
                     } else {
                         inflictedDamages = (int) ((int) combatant.nextAttack.get(damage) * combatant.attack * target.defense);
 
                         if (combatant.nextAttack.get(name).equals("Fury Attack")) {
-                            int numberOfAttacks = UsefulFunctions.randomInt(1, 5);
+                            int numberOfAttacks = UsefulFunctions.randomInt(1, 4);
                             inflictedDamages *= numberOfAttacks;
                             out.print("The Fury attack touched your " + targetName + " " + numberOfAttacks + " time");
                             if (numberOfAttacks > 1) out.println("s");
@@ -325,7 +323,11 @@ public class FightInstance {
             case 4 -> warrior.nextAttack = WarriorAttacks.attack4;
         }
 
-        if (LastPower) warrior.nextAttack.set(damage, (int) warrior.nextAttack.get(damage) * 1.20);
+        if (LastPower) {
+            int newDamage = (int) warrior.nextAttack.get(damage) ;
+            newDamage *= 1.20 ;
+            warrior.nextAttack.set(damage, newDamage);
+        }
 
         out.println("Your Warrior's " + warrior.combatantID + " move is " + warrior.nextAttack.get(0)); // 0 = Name of the attack
 

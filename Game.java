@@ -27,8 +27,19 @@ public class Game {
 
     }
 
-    public void playFight() {
+    public void playFight(int numberOfFights) {
         fight.fightEngine();
+
+        if (fight.isFightWon ){
+            System.out.println("Congrats " + nameOfThePlayer + " you just won your fight " + numberOfFights + " !");
+        } else {
+            System.out.println("\n-------------------------------------------------------------------------------------------------");
+            System.out.println("Unforthunately, you're too weak to fight against these monsters");
+            System.out.println("I shouldn't have given to you a pokemo... Uhm the chance of being here");
+            System.out.println("Well get out now " + nameOfThePlayer);
+            System.exit(0);
+        }
+
     }
 
     public void askUserHisName() {
