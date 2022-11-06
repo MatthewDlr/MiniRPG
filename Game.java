@@ -16,8 +16,9 @@ public class Game {
         //gameInitialize.settingUpHeroClass(); this function is automatically called by the previous one ; it is just displaye as information title.
     }
 
-    public void initializeFight() {
+    public void initializeFight(int numberOfFights) {
         this.fight = new FightInstance();
+        if (numberOfFights > 1) upgradeHeroes(numberOfFights);
         fight.creatingEnemiesWave(this);
         fight.gatheringAliveHerosAndMonster(this);
         fight.sortingCombatantsBySpeed();
@@ -27,10 +28,65 @@ public class Game {
 
     }
 
+    public void upgradeHeroes(int numberOfFights) {
+        ArrayList<Combatant> oldHeroes = new ArrayList<>(listOfHeros);
+        listOfHeros.clear();
+
+        for (Combatant hero : oldHeroes) {
+            switch (hero.name) {
+
+                case "Warrior" -> {
+                    hero.attack = 1.6 + 0.15 * numberOfFights;
+                    hero.defense = 0.80 - 0.1 * numberOfFights;
+                    hero.lifePoints = 100 + 5 * numberOfFights;
+                    hero.maximumLifePoints = hero.lifePoints;
+                    hero.speed = 40 + 3 * numberOfFights;
+                    this.listOfHeros.add(hero);
+                }
+
+                case "Hunter" -> {
+                    Hunter hunter = (Hunter) hero;
+                    hunter.attack = 1.3 + 0.12 * numberOfFights;
+                    hunter.defense = 0.90 - 0.12 * numberOfFights;
+                    hunter.lifePoints = 135 + 10 * numberOfFights;
+                    hunter.maximumLifePoints = hunter.lifePoints;
+                    hunter.speed = 75 + 6 * numberOfFights;
+                    hunter.arrowsNumber = 5 + numberOfFights;
+                    listOfHeros.add(hunter);
+                }
+
+                case "Mage" -> {
+                    Mage mage = (Mage) hero;
+                    mage.name = "Mage";
+                    mage.attack = 1.1 + 0.5 * numberOfFights;
+                    mage.defense = 0.65 - 0.3 * numberOfFights;
+                    mage.lifePoints = 125 + 8 * numberOfFights;
+                    mage.maximumLifePoints = mage.lifePoints;
+                    mage.speed = 50 + 5 * numberOfFights;
+                    mage.numberOfSouls = 20 + 2 * numberOfFights;
+                    listOfHeros.add(mage);
+                }
+
+                case "Healer" -> {
+                    Healer healer = (Healer) hero;
+                    healer.attack = 1 + 0.2 * numberOfFights;
+                    healer.defense = 0.90 - 0.2 * numberOfFights;
+                    healer.lifePoints = 80 + 10 * numberOfFights;
+                    healer.maximumLifePoints = healer.lifePoints;
+                    healer.currentLifePoints = 0;
+                    healer.speed = 45 + 4 * numberOfFights ;
+                    listOfHeros.add(healer);
+                }
+            }
+            index++;
+            System.out.println("Boomm, The stats of your " + hero.name + " " + hero.combatantID + " just increased");
+        }
+    }
+
     public void playFight(int numberOfFights) {
         fight.fightEngine();
 
-        if (fight.isFightWon ){
+        if (fight.isFightWon) {
             System.out.println("Congrats " + nameOfThePlayer + " you just won your fight " + numberOfFights + " !");
         } else {
             System.out.println("\n-------------------------------------------------------------------------------------------------");
@@ -128,7 +184,7 @@ public class Game {
                 mage.attack = 1.1;
                 mage.defense = 0.65;
                 mage.lifePoints = 125;
-                mage.maximumLifePoints = 125 ;
+                mage.maximumLifePoints = 125;
                 mage.speed = 50;
                 mage.numberOfSouls = 20;
                 mage.talent = "Soul gathering";
@@ -144,7 +200,7 @@ public class Game {
                 healer.defense = 0.90;
                 healer.lifePoints = 80;
                 healer.maximumLifePoints = 80;
-                healer.currentLifePoints = 0 ;
+                healer.currentLifePoints = 0;
                 healer.speed = 45;
                 healer.talent = "Self Help";
                 healer.talentDescription = "Life points are increased by 10% if no damages are received during a turn";
@@ -156,4 +212,6 @@ public class Game {
         }
         System.out.println();
     }
+
+
 }

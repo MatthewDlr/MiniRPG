@@ -37,7 +37,9 @@ public class FightInstance {
 
     public void gatheringAliveHerosAndMonster(Game game) {
         for (Combatant hero : game.listOfHeros) {
+            
             if (hero.lifePoints > 0) {
+                hero.lifePoints /= 2 ;
                 listOfCombatantsInFight.add(hero);
                 listOfHeroesInFight.add(hero);
             } else {
