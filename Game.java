@@ -78,7 +78,6 @@ public class Game {
                     listOfHeros.add(healer);
                 }
             }
-            index++;
             System.out.println("Boomm, The stats of your " + hero.name + " " + hero.combatantID + " just increased");
         }
     }
@@ -172,7 +171,7 @@ public class Game {
                 hunter.maximumLifePoints = 135;
                 hunter.speed = 75;
                 hunter.combatantID = heroNumber;
-                hunter.arrowsNumber = 10;
+                hunter.arrowsNumber = 5;
                 hunter.talent = "Brave Bow";
                 hunter.talentDescription = "When his life is full, arrows are not used ";
                 listOfHeros.add(hunter);

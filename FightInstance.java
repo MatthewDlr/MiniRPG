@@ -39,7 +39,6 @@ public class FightInstance {
         for (Combatant hero : game.listOfHeros) {
             
             if (hero.lifePoints > 0) {
-                hero.lifePoints /= 2 ;
                 listOfCombatantsInFight.add(hero);
                 listOfHeroesInFight.add(hero);
             } else {
@@ -383,6 +382,9 @@ public class FightInstance {
                 out.println("Choice out of range !");
             }
             if (!fullLife) {
+                if (userChoice == 2 && hunter.arrowsNumber < 1){
+                    out.print("Ooops ! You don't have enough arrows to use this attack ");
+                } else
                 if ((userChoice == 2 && hunter.arrowsNumber < 1) || (userChoice == 3 && hunter.arrowsNumber < 2)) {
                     isChoiceCorrect = false;
                     out.print("Ooops ! You don't have enough arrows to use this attack ");
