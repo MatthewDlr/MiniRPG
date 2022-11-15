@@ -9,7 +9,7 @@ public class FightInstance {
     int range = 3;
     int name = 0;
     int damage = 2;
-    boolean isFightWon ;
+    boolean isFightWon;
 
     public void creatingEnemiesWave(Game game) {
         game.difficultyCoef += 0.15;
@@ -32,12 +32,12 @@ public class FightInstance {
             listOfEnemiesInFight.add(enemy);
         }
         out.print("Press any key to continue");
-        AskUserForInput.askAString();
+        AskUserForInput.AString();
     }
 
     public void gatheringAliveHerosAndMonster(Game game) {
         for (Combatant hero : game.listOfHeros) {
-            
+
             if (hero.lifePoints > 0) {
                 listOfCombatantsInFight.add(hero);
                 listOfHeroesInFight.add(hero);
@@ -69,18 +69,18 @@ public class FightInstance {
             number++;
         }
         out.println("Press enter to continue");
-        AskUserForInput.askAString();
+        AskUserForInput.AString();
     }
 
     public void fightEngine() {
         int turn = 0;
-        boolean isFightOver = false ;
-        
+        boolean isFightOver = false;
+
         while (!isFightOver) {
             turn++;
             out.println("Turn: " + turn);
             out.print("Press enter to continue");
-            AskUserForInput.askAString();
+            AskUserForInput.AString();
             out.println("------------------------------------------------------------------------------------------------------\n");
 
             for (Combatant combatant : listOfCombatantsInFight) {
@@ -100,7 +100,7 @@ public class FightInstance {
                 performAttacks(combatant);
 
                 out.print("Press enter to continue");
-                AskUserForInput.askAString();
+                AskUserForInput.AString();
             }
             removingDeadCombatant();
             printCombatantsLife();
@@ -111,7 +111,7 @@ public class FightInstance {
 
     public void removingDeadCombatant() {
         ArrayList<Combatant> copyOflistOfEnemiesInFight = new ArrayList<>(listOfEnemiesInFight);
-        ArrayList<Combatant> copyOflistOfHeroesInFight = new ArrayList<> (listOfHeroesInFight);
+        ArrayList<Combatant> copyOflistOfHeroesInFight = new ArrayList<>(listOfHeroesInFight);
 
         for (Combatant hero : copyOflistOfHeroesInFight) {
             if (hero.lifePoints <= 0) {
@@ -156,7 +156,7 @@ public class FightInstance {
                     mage.numberOfSouls *= 1.2;
                     out.println("Your Mage " + combatant.combatantID + "'s souls increased from " + mage.numberOfSouls * 0.8 + " to " + mage.numberOfSouls);
                 } else {
-                    mage.numberOfSouls -= 20 ;
+                    mage.numberOfSouls -= 20;
                     for (Combatant hero : listOfHeroesInFight) {
                         hero.defense *= 1.20;
                     }
@@ -311,11 +311,8 @@ public class FightInstance {
         if (LastPower) out.println("Yes (25% attack increase)");
         else out.println("No");
 
-        int userChoice;
-        do {
-            out.print("What is your userChoice ? (1 to 4) ");
-            userChoice = AskUserForInput.askAnInt();
-        } while (userChoice < 1 || userChoice > 4);
+        int userChoice = AskUserForInput.AnIntBetween(1, 4);
+
 
         switch (userChoice) {
             case 1 -> warrior.nextAttack = WarriorAttacks.attack1;
@@ -325,8 +322,8 @@ public class FightInstance {
         }
 
         if (LastPower) {
-            int newDamage = (int) warrior.nextAttack.get(damage) ;
-            newDamage *= 1.20 ;
+            int newDamage = (int) warrior.nextAttack.get(damage);
+            newDamage *= 1.20;
             warrior.nextAttack.set(damage, newDamage);
         }
 
@@ -339,19 +336,10 @@ public class FightInstance {
 
         } else if ((Integer) warrior.nextAttack.get(range) == 1) {
             out.println();
-
             printEnemiesLife();
+            warrior.nextTargets = AskUserForInput.AnEnemyBetween(1, listOfEnemiesInFight.size()) ;
 
-            do {
-                out.print("Which enemy do you want to attack ? ");
-                userChoice = AskUserForInput.askAnInt();
-            } while (userChoice < 1 || userChoice > listOfEnemiesInFight.size());
-
-            warrior.nextTargets = userChoice;
-            out.println("Got it, Enemy " + userChoice + " will be attacked");
-        } else {
-            warrior.nextTargets = 0;
-        }
+        } else warrior.nextTargets = 0;
         out.println("\n");
     }
 
@@ -371,26 +359,24 @@ public class FightInstance {
         else out.println("No");
 
         int userChoice;
-        boolean isChoiceCorrect;
+        boolean isCorrect;
         do {
-            out.print("What is your Choice ? ");
-            isChoiceCorrect = true;
-            userChoice = AskUserForInput.askAnInt();
+            isCorrect = true;
+            userChoice = AskUserForInput.AnIntBetween(1, 4);
 
-            if (userChoice < 1 || userChoice > 4) {
-                isChoiceCorrect = false;
-                out.println("Choice out of range !");
+            if (userChoice == 2) {
+                if (hunter.arrowsNumber < 1) {
+                    out.println("Damned ! Your Hunter run out of arrows, please change your attack");
+                    isCorrect = false;
+                } else if (!fullLife) hunter.arrowsNumber -= 1;
+
+            } else if (userChoice == 3) {
+                if (hunter.arrowsNumber < 2) {
+                    out.println("Damned ! Your Hunter run out of arrows, please change your attack");
+                    isCorrect = false;
+                } else if (!fullLife) hunter.arrowsNumber -= 2;
             }
-            if (!fullLife) {
-                if (userChoice == 2 && hunter.arrowsNumber < 1){
-                    out.print("Ooops ! You don't have enough arrows to use this attack ");
-                } else
-                if ((userChoice == 2 && hunter.arrowsNumber < 1) || (userChoice == 3 && hunter.arrowsNumber < 2)) {
-                    isChoiceCorrect = false;
-                    out.print("Ooops ! You don't have enough arrows to use this attack ");
-                }
-            }
-        } while (!isChoiceCorrect);
+        } while (!isCorrect);
 
         switch (userChoice) {
             case 1 -> hunter.nextAttack = HunterAttacks.attack1;
@@ -407,19 +393,10 @@ public class FightInstance {
 
         } else if ((Integer) hunter.nextAttack.get(range) == 1) {
             out.println();
-
             printEnemiesLife();
+            hunter.nextTargets = AskUserForInput.AnEnemyBetween(1, listOfEnemiesInFight.size()) ;
 
-            do {
-                out.print("Which enemy do you want to attack ? ");
-                userChoice = AskUserForInput.askAnInt();
-            } while (userChoice < 1 || userChoice > listOfEnemiesInFight.size());
-
-            hunter.nextTargets = userChoice;
-            out.println("Got it, Enemy " + userChoice + " will be attacked");
-        } else {
-            hunter.nextTargets = 0;
-        }
+        } else hunter.nextTargets = 0;
         out.println("\n");
     }
 
@@ -432,17 +409,11 @@ public class FightInstance {
         out.println("   Life points  : " + mage.lifePoints + "/" + mage.maximumLifePoints + " hp");
         out.println("Souls gathered  : " + mage.numberOfSouls);
 
-        int userChoice;
         boolean isCorrect;
+        int userChoice;
         do {
-            out.print("What is your userChoice ? ");
             isCorrect = true;
-            userChoice = AskUserForInput.askAnInt();
-
-            if (userChoice < 1 || userChoice > 4) {
-                isCorrect = false;
-                out.println("Choice out of range !");
-            }
+            userChoice = AskUserForInput.AnIntBetween(1, 4);
             if ((userChoice == 3 && mage.numberOfSouls < 20) || (userChoice == 4 && mage.numberOfSouls == 0)) {
                 isCorrect = false;
                 out.println("Hey ! You don't have enough souls to use this attack");
@@ -462,22 +433,16 @@ public class FightInstance {
         out.println("Your Mage's " + mage.combatantID + " move is " + mage.nextAttack.get(0)); // 0 = Name of the attack
 
         // Asking for targets
-        if ((Integer) mage.nextAttack.get(range) == 1) {
+        if ((Integer) mage.nextAttack.get(range) >= listOfEnemiesInFight.size()) {
+            out.println("All the enemies will be attacked");
+            mage.nextTargets = 5;
+
+        } else if ((Integer) mage.nextAttack.get(range) == 1) {
             out.println();
-
             printEnemiesLife();
+            mage.nextTargets = AskUserForInput.AnEnemyBetween(1, listOfEnemiesInFight.size()) ;
 
-            do {
-                out.print("Which enemy do you want to attack ? ");
-                userChoice = AskUserForInput.askAnInt();
-            } while (userChoice < 1 || userChoice > listOfEnemiesInFight.size());
-            mage.nextTargets = userChoice;
-            out.println("Got it, Enemy " + userChoice + " will be attacked");
-
-        } else {
-            mage.nextTargets = (int) mage.nextAttack.get(range);
-        }
-
+        } else mage.nextTargets = 0;
         out.println("\n");
     }
 
@@ -496,11 +461,7 @@ public class FightInstance {
         out.println("4/ Heal Wave    : Heal the team a little                                          " + " [Damage: " + HealerAttacks.attack4.get(2) + " , Range : " + HealerAttacks.attack4.get(3) + ", Heal: " + HealerAttacks.attack4.get(4) + "]");
         out.println("   Life points  : " + healer.lifePoints + "/" + healer.maximumLifePoints + " hp");
 
-        int userChoice;
-        do {
-            out.print("What is your userChoice ? (1 to 4) ");
-            userChoice = AskUserForInput.askAnInt();
-        } while (userChoice < 1 || userChoice > 4);
+        int userChoice = AskUserForInput.AnIntBetween(1, 4);
 
         switch (userChoice) {
             case 1 -> healer.nextAttack = HealerAttacks.attack1;
@@ -511,23 +472,19 @@ public class FightInstance {
         out.println("Your Healer's " + healer.combatantID + " move is " + healer.nextAttack.get(0)); // 0 = Name of the attack
 
         // Asking for targets
-        if ((Integer) healer.nextAttack.get(range) == 1) {
+        if ((Integer) healer.nextAttack.get(range) >= listOfEnemiesInFight.size()) {
+            if (healer.nextAttack.get(name) == "Heal Wave") out.println("Your team will be healed");
+            else out.println("All the enemies will be attacked");
+            healer.nextTargets = 4;
+
+        } else if ((Integer) healer.nextAttack.get(range) == 1) {
             out.println();
-
             printEnemiesLife();
+            healer.nextTargets = AskUserForInput.AnEnemyBetween(1, listOfEnemiesInFight.size()) ;
 
-            do {
-                out.print("Which enemy do you want to attack ? ");
-                userChoice = AskUserForInput.askAnInt();
-            } while (userChoice < 1 || userChoice > listOfEnemiesInFight.size());
-            healer.nextTargets = userChoice;
-            out.println("Got it, Enemy " + userChoice + " will be attacked");
+        } else healer.nextTargets = 0;
 
-        } else {
-            healer.nextTargets = (int) healer.nextAttack.get(range);
-        }
         out.println("\n");
-
         healer.currentLifePoints = healer.lifePoints;
     }
 
