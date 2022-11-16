@@ -9,7 +9,14 @@ public class Main {
             game.playFight(numberOfFights);
         }
         
+        System.out.println("\n----------------------------------------------------");
         System.out.println("BOSS TIME");
+        System.out.println("----------------------------------------------------\n");
 
+        game.initializeBossFight();
+        game.playFight(6);
+
+        System.out.println("Okay cool you just won the game (finally) ");
+        System.out.println("Now get out of my world before I kick your ass ");
     }
 }

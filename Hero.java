@@ -1,9 +1,9 @@
 import java.util.*;
 
 public abstract class Hero extends Combatant {
-        static public String heroExperienceLevel;
         public String talent;
         public  String talentDescription;
+
 }
 
 class Warrior extends Hero  {

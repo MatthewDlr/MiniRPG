@@ -19,9 +19,19 @@ public class Game {
         this.fight = new FightInstance();
         if (numberOfFights > 1) upgradeHeroes();
         fight.creatingEnemiesWave(this);
-        fight.gatheringAliveHerosAndMonster(this);
+        fight.gatheringHerosAndMonster(this);
         fight.sortingCombatantsBySpeed();
         System.out.println("Hurry up " + nameOfThePlayer + " the fight is about to start !");
+        System.out.println("Press any key to continue");
+        AskUserForInput.AString();
+
+    }
+    public void  initializeBossFight(){
+        this.fight = new FightInstance();
+        upgradeHeroes();
+        fight.creatingBossWave(this);
+        fight.sortingCombatantsBySpeed();
+        System.out.println("Let's go " + nameOfThePlayer + " the end game is approaching");
         System.out.println("Press any key to continue");
         AskUserForInput.AString();
 
@@ -33,18 +43,26 @@ public class Game {
 
         for (Combatant hero : oldHeroes) {
 
-            System.out.println("Which stats of your hero do you want to upgrade ? ");
-            System.out.println(" 1/ Attack \n 2/Defense \n 3/ Life Points \n 4/ Speed");
+            System.out.println("Which stats of your " + hero.name + " " + hero.combatantID + " do you want to upgrade ? ");
+            System.out.println(" 1/ Attack \n 2/ Defense \n 3/ Life Points \n 4/ Speed");
             int userChoice = AskUserForInput.AnIntBetween(1, 4);
+
+            hero.attack = hero.maximumAttack ;
+            hero.defense = hero.maximumDefense ;
+            hero.lifePoints = hero.maximumLifePoints ;
+            hero.speed = hero.maximumSpeed ;
 
             switch (userChoice) {
 
-                case 1 -> hero.attack = hero.maximumAttack = hero.maximumAttack * 1.25;
-                case 2 -> hero.defense = hero.maximumDefense = hero.maximumDefense * 1.25;
-                case 3 -> hero.lifePoints = hero.maximumLifePoints = (int) (hero.maximumLifePoints * 1.25);
-                case 4 -> hero.speed = hero.maximumSpeed = hero.maximumSpeed * 1.25;
+                case 1 -> hero.attack *= 1.25;
+                case 2 -> hero.defense *= 1.25;
+                case 3 -> {
+                    hero.lifePoints *= 1.25;
+                    hero.maximumLifePoints = hero.lifePoints ;
+                }
+                case 4 -> hero.speed *= 1.25;
             }
-            System.out.println("Boomm, the stat " + userChoice + " of your " + hero.name + " " + hero.combatantID + " has increased by 25% \n");
+            System.out.println("Boomm, the stat " + userChoice + " of your " + hero.name + " " + hero.combatantID + " has been increased by 25% \n");
         }
     }
 
@@ -188,5 +206,4 @@ public class Game {
         }
         System.out.println();
     }
-    
 }

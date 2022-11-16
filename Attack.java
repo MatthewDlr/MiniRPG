@@ -49,7 +49,15 @@ final class EnemyAttacks extends Attack{
     static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Charge"      ,"" , 30   , 1           , 1d                      , 1d            , 1d                    ));
     static ArrayList<Object> attack2 = new ArrayList<>(Arrays.asList("Creaking"    ,"", 0     , 5           , 0.95d                   , 1d            , 0.90d                 ));
     static ArrayList<Object> attack2b = new ArrayList<>(Arrays.asList("Stick Web"  ,"", 15    , 1           , 1d                      , 1d            , 0.90d                 ));
-    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Work up"     ,"", 0     , 0           , 1d                      , 1.15d         , 1d                    ));
+    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Work Up"     ,"", 0     , 0           , 1d                      , 1.15d         , 1d                    ));
     static ArrayList<Object> attack4 = new ArrayList<>(Arrays.asList("Fury Attack" ,"", 15    , 1           , 1d                      , 1d            , 1d                    ));
 
+}
+
+final class BossAttacks extends Attack{
+    //                                                               Name                 ,Damage , Targets nb , Accuracy, Defense change , Attack change, Oponent Speed change, Healing
+    static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Hammer Charge"  ,"" , 70    , 1          , 75      , 1d             , 1d           , 1d                  , 0    ));
+    static ArrayList<Object> attack2 = new ArrayList<>(Arrays.asList("Low Kick"       ,"" , 25    , 5          , 100     , 1d             , 1d           , 0.9d                , 0    ));
+    static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Roost"          ,"" , 0     , 0          , 100     , 0.9            , 1d           , 1d                  , 1.25 ));
+    static ArrayList<Object> attack4 = new ArrayList<>(Arrays.asList("Thunder Wave"   ,"" , 0     , 1          , 90      , 1              , 1d           , 1d                  , 1    ));
 }

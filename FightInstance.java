@@ -35,16 +35,44 @@ public class FightInstance {
         AskUserForInput.AString();
     }
 
-    public void gatheringAliveHerosAndMonster(Game game) {
-        for (Combatant hero : game.listOfHeros) {
+    public void creatingBossWave(Game game) {
+        int totallife = 0;
+        double highestAttack = 0;
+        double higestSpeed = 0;
+        double highestDefense = 0;
 
-            if (hero.lifePoints > 0) {
-                listOfCombatantsInFight.add(hero);
-                listOfHeroesInFight.add(hero);
-            } else {
-                out.println("Unfortunately, your " + hero.name + " has fallen and won't be able fo fight with you");
-            }
+        listOfHeroesInFight.addAll(game.listOfHeros);
+
+        for (Combatant hero : listOfHeroesInFight) {
+            totallife += hero.lifePoints;
+            if (hero.attack > highestAttack) highestAttack = hero.attack;
+            if (hero.defense > highestDefense) highestDefense = hero.defense;
+            if (hero.speed > higestSpeed) higestSpeed = hero.speed;
         }
+
+        totallife *= 1.2;
+        highestAttack *= 1.1;
+        higestSpeed += 10;
+        highestDefense *= 1.1;
+
+        Enemy boss = new Enemy();
+        boss.name = "Gaëtant";
+        boss.attack = highestAttack;
+        boss.defense = highestDefense;
+        boss.speed = higestSpeed;
+        boss.lifePoints = totallife;
+        boss.maximumLifePoints = boss.lifePoints;
+
+        listOfEnemiesInFight.add(boss);
+        listOfCombatantsInFight.addAll(game.listOfHeros);
+        listOfCombatantsInFight.add(boss);
+        out.print("Press any key to continue");
+        AskUserForInput.AString();
+    }
+
+    public void gatheringHerosAndMonster(Game game) {
+        listOfHeroesInFight.addAll(game.listOfHeros);
+        listOfCombatantsInFight.addAll(game.listOfHeros);
         listOfCombatantsInFight.addAll(listOfEnemiesInFight);
     }
 
@@ -78,7 +106,7 @@ public class FightInstance {
 
         while (!isFightOver) {
             turn++;
-            out.println("Turn: " + turn);
+            out.println("\nTurn: " + turn);
             out.print("Press enter to continue");
             AskUserForInput.AString();
             out.println("------------------------------------------------------------------------------------------------------\n");
@@ -90,6 +118,7 @@ public class FightInstance {
                     case "Hunter" -> askUserforHunterAttack((Hunter) combatant);
                     case "Mage" -> askUserForMageAttack((Mage) combatant);
                     case "Healer" -> askUserForHealerAttack((Healer) combatant);
+                    case "Gaëtant" -> bossAI((Enemy) combatant);
                 }
             }
             sortingCombatantsBySpeed();
@@ -134,6 +163,13 @@ public class FightInstance {
         if (combatant.lifePoints <= 0) {
             out.println("\n" + combatant.name + " " + combatant.combatantID + " is not able to fight anymore :/\n");
             return;
+        }
+        if (combatant.paralyzed) {
+
+            if (UsefulFunctions.randomInt(1, 4) == 1) {
+                out.println("\n Unforthunately, " + combatant.name + " " + combatant.combatantID + " is parlayzed and can't attack this tour");
+                return;
+            }
         }
 
         out.println("\n" + combatant.name + " " + combatant.combatantID + " is using " + combatant.nextAttack.get(name));
@@ -192,16 +228,40 @@ public class FightInstance {
                 }
                 return;
             }
+            if (combatant.name.equals("Gaëtant")) {
+                if (combatant.nextAttack.get(name).equals("Roost")) {
+                    combatant.lifePoints += (int) (combatant.maximumLifePoints * 0.25);
+                    combatant.defense *= 0.90;
+                    out.println("The Boss recovered 25% of his life point, but his defense slightly decreased in return");
+                } else {
+                    int random;
+                    do {
+                        random = UsefulFunctions.randomInt(0, listOfHeroesInFight.size());
+                    } while ((listOfHeroesInFight.get(random)).paralyzed);
+                    Combatant hero = listOfHeroesInFight.get(random);
+                    hero.paralyzed = true;
+                    out.println("Damned, " + hero.name + " " + hero.combatantID + " is parlyzed ! ");
+                }
+            }
         }
+
         List<Combatant> targetsList;
-        if (combatant.name.equals("Enemy")) targetsList = listOfHeroesInFight;
+
+        if (combatant.name.equals("Enemy") || combatant.name.equals("Gaëtant") ) targetsList = listOfHeroesInFight;
         else targetsList = listOfEnemiesInFight;
         int inflictedDamages = 0;
 
         if (combatant.nextTargets == 5) { // 5 mean "all the team"
             for (Combatant target : targetsList) {
-                if (!(target.name.equals("Healer") && target.nextAttack.get(name).equals("Protect"))) {
+                if (target.name.equals("Healer") && target.nextAttack.get(name).equals("Protect")) {
+                    out.println("Your healer is protected from the attack ! ");
+                } else {
                     target.lifePoints -= (int) combatant.nextAttack.get(damage) * combatant.attack * target.defense;
+
+                    if (combatant.nextAttack.get(name).equals("Low Kick")) {
+                        target.speed *= 0.90 ;
+                        out.println("Your team's speed have slightly decreased");
+                    }
                 }
             }
             out.println("All the enemies have been attacked");
@@ -216,6 +276,13 @@ public class FightInstance {
                         Mage mage = (Mage) combatant;
                         inflictedDamages = (int) (mage.numberOfSouls * 3 * mage.attack * target.defense);
                         mage.numberOfSouls = 0;
+
+                        if (combatant.nextAttack.get(name).equals("Hammer Charge")) {
+                            if (UsefulFunctions.randomInt(0, 100) >= 75){
+                                out.println("Worayy the Boss just missed his attack ");
+                                return;
+                            }
+                        }
 
                     } else {
                         inflictedDamages = (int) ((int) combatant.nextAttack.get(damage) * combatant.attack * target.defense);
@@ -337,7 +404,7 @@ public class FightInstance {
         } else if ((Integer) warrior.nextAttack.get(range) == 1) {
             out.println();
             printEnemiesLife();
-            warrior.nextTargets = AskUserForInput.AnEnemyBetween(1, listOfEnemiesInFight.size()) ;
+            warrior.nextTargets = AskUserForInput.AnEnemyBetween(1, listOfEnemiesInFight.size());
 
         } else warrior.nextTargets = 0;
         out.println("\n");
@@ -394,7 +461,7 @@ public class FightInstance {
         } else if ((Integer) hunter.nextAttack.get(range) == 1) {
             out.println();
             printEnemiesLife();
-            hunter.nextTargets = AskUserForInput.AnEnemyBetween(1, listOfEnemiesInFight.size()) ;
+            hunter.nextTargets = AskUserForInput.AnEnemyBetween(1, listOfEnemiesInFight.size());
 
         } else hunter.nextTargets = 0;
         out.println("\n");
@@ -440,7 +507,7 @@ public class FightInstance {
         } else if ((Integer) mage.nextAttack.get(range) == 1) {
             out.println();
             printEnemiesLife();
-            mage.nextTargets = AskUserForInput.AnEnemyBetween(1, listOfEnemiesInFight.size()) ;
+            mage.nextTargets = AskUserForInput.AnEnemyBetween(1, listOfEnemiesInFight.size());
 
         } else mage.nextTargets = 0;
         out.println("\n");
@@ -480,7 +547,7 @@ public class FightInstance {
         } else if ((Integer) healer.nextAttack.get(range) == 1) {
             out.println();
             printEnemiesLife();
-            healer.nextTargets = AskUserForInput.AnEnemyBetween(1, listOfEnemiesInFight.size()) ;
+            healer.nextTargets = AskUserForInput.AnEnemyBetween(1, listOfEnemiesInFight.size());
 
         } else healer.nextTargets = 0;
 
@@ -509,6 +576,10 @@ public class FightInstance {
         } else {
             enemy.nextTargets = UsefulFunctions.randomInt(1, listOfHeroesInFight.size());
         }
+    }
+
+    public void bossAI(Enemy boss) {
+
     }
 
     public void printEnemiesLife() {

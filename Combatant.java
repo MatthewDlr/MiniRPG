@@ -11,6 +11,7 @@ public class Combatant extends Game {
     public double speed; // The higher the better (between 0 and 100)
     public double maximumSpeed ;
     public int combatantID;
+    public boolean paralyzed = false ;
 
     ArrayList<Object> nextAttack = new ArrayList<>();
     int nextTargets ;
