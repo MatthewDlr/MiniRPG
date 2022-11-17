@@ -38,10 +38,9 @@ public class Game {
     }
 
     public void upgradeHeroes() {
-        ArrayList<Combatant> oldHeroes = new ArrayList<>(listOfHeros);
-        listOfHeros.clear();
-
-        for (Combatant hero : oldHeroes) {
+        System.out.println("\n Your team have been healed to be ready for next fight");
+        
+        for (Combatant hero : listOfHeros) {
 
             System.out.println("Which stats of your " + hero.name + " " + hero.combatantID + " do you want to upgrade ? ");
             System.out.println(" 1/ Attack \n 2/ Defense \n 3/ Life Points \n 4/ Speed");
@@ -51,6 +50,7 @@ public class Game {
             hero.defense = hero.maximumDefense ;
             hero.lifePoints = hero.maximumLifePoints ;
             hero.speed = hero.maximumSpeed ;
+
 
             switch (userChoice) {
 

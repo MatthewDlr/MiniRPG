@@ -165,7 +165,6 @@ public class FightInstance {
             return;
         }
         if (combatant.paralyzed) {
-
             if (UsefulFunctions.randomInt(1, 4) == 1) {
                 out.println("\n Unforthunately, " + combatant.name + " " + combatant.combatantID + " is parlayzed and can't attack this tour");
                 return;
@@ -224,7 +223,7 @@ public class FightInstance {
                         hero.defense *= 0.95;
                         hero.speed *= 0.90;
                     }
-                    out.println("Your team's defense ans speed have slightly decreased");
+                    out.println("Your team's defense and speed have slightly decreased");
                 }
                 return;
             }
@@ -240,64 +239,64 @@ public class FightInstance {
 
                 }
             }
+        }
 
-            List<Combatant> targetsList;
+        List<Combatant> targetsList;
 
-            if (combatant.name.equals("Enemy") || combatant.name.equals("Gaëtant")) targetsList = listOfHeroesInFight;
-            else targetsList = listOfEnemiesInFight;
-            int inflictedDamages = 0;
+        if (combatant.name.equals("Enemy") || combatant.name.equals("Gaëtant")) targetsList = listOfHeroesInFight;
+        else targetsList = listOfEnemiesInFight;
+        int inflictedDamages = 0;
 
-            if (combatant.nextTargets == 5) { // 5 mean "all the team"
-                for (Combatant target : targetsList) {
-                    if (target.name.equals("Healer") && target.nextAttack.get(name).equals("Protect")) {
-                        out.println("Your healer is protected from the attack ! ");
-                    } else {
-                        target.lifePoints -= (int) combatant.nextAttack.get(damage) * combatant.attack * target.defense;
+        if (combatant.nextTargets == 5) { // 5 mean "all the team"
+            for (Combatant target : targetsList) {
+                if (target.name.equals("Healer") && target.nextAttack.get(name).equals("Protect")) {
+                    out.println("Your healer is protected from the attack ! ");
+                } else {
+                    target.lifePoints -= (int) combatant.nextAttack.get(damage) * combatant.attack * target.defense;
 
-                        if (combatant.nextAttack.get(name).equals("Low Kick")) {
-                            target.speed *= 0.90;
-                            out.println("Your team's speed have slightly decreased");
-                        }
+                    if (combatant.nextAttack.get(name).equals("Low Kick")) {
+                        target.speed *= 0.90;
+                        out.println("Your team's speed have slightly decreased");
                     }
                 }
-                out.println("All the enemies have been attacked");
+            }
+            out.println("All the enemies have been attacked");
 
-            } else {
-                for (Combatant target : targetsList) {
-                    String targetName = target.name + " " + target.combatantID;
+        } else {
+            for (Combatant target : targetsList) {
+                String targetName = target.name + " " + target.combatantID;
 
-                    if (target.combatantID == combatant.nextTargets && (!(target.name.equals("Healer") && target.nextAttack.get(name).equals("Protect")))) {
+                if (target.combatantID == combatant.nextTargets && (!(target.name.equals("Healer") && target.nextAttack.get(name).equals("Protect")))) {
 
-                        if (combatant.nextAttack.get(name).equals("Final Shout")) {
-                            Mage mage = (Mage) combatant;
-                            inflictedDamages = (int) (mage.numberOfSouls * 3 * mage.attack * target.defense);
-                            mage.numberOfSouls = 0;
+                    if (combatant.nextAttack.get(name).equals("Final Shout")) {
+                        Mage mage = (Mage) combatant;
+                        inflictedDamages = (int) (mage.numberOfSouls * 3 * mage.attack * target.defense);
+                        mage.numberOfSouls = 0;
 
-                            if (combatant.nextAttack.get(name).equals("Hammer Charge")) {
-                                if (UsefulFunctions.randomInt(0, 100) >= 75) {
-                                    out.println("Worayy the Boss just missed his attack ");
-                                    return;
-                                }
-                            }
-
-                        } else {
-                            inflictedDamages = (int) ((int) combatant.nextAttack.get(damage) * combatant.attack * target.defense);
-
-                            if (combatant.nextAttack.get(name).equals("Fury Attack")) {
-                                int numberOfAttacks = UsefulFunctions.randomInt(1, 4);
-                                inflictedDamages *= numberOfAttacks;
-                                out.print("The Fury attack touched your " + targetName + " " + numberOfAttacks + " time");
-                                if (numberOfAttacks > 1) out.println("s");
-                                else out.println();
+                        if (combatant.nextAttack.get(name).equals("Hammer Charge")) {
+                            if (UsefulFunctions.randomInt(0, 100) >= 75) {
+                                out.println("Worayy the Boss just missed his attack ");
+                                return;
                             }
                         }
-                        target.lifePoints -= inflictedDamages;
-                        out.println(targetName + " lost " + inflictedDamages + " hp");
 
-                        if (combatant.nextAttack.get(name).equals("Stick Web")) {
-                            target.speed *= 0.90;
-                            out.println("The speed of " + targetName + " has slightly decreased");
+                    } else {
+                        inflictedDamages = (int) ((int) combatant.nextAttack.get(damage) * combatant.attack * target.defense);
+
+                        if (combatant.nextAttack.get(name).equals("Fury Attack")) {
+                            int numberOfAttacks = UsefulFunctions.randomInt(1, 4);
+                            inflictedDamages *= numberOfAttacks;
+                            out.print("The Fury attack touched your " + targetName + " " + numberOfAttacks + " time");
+                            if (numberOfAttacks > 1) out.println("s");
+                            else out.println();
                         }
+                    }
+                    target.lifePoints -= inflictedDamages;
+                    out.println(targetName + " lost " + inflictedDamages + " hp");
+
+                    if (combatant.nextAttack.get(name).equals("Stick Web")) {
+                        target.speed *= 0.90;
+                        out.println("The speed of " + targetName + " has slightly decreased");
                     }
                 }
             }
@@ -324,6 +323,7 @@ public class FightInstance {
             }
         }
     }
+
 
     public void prioritizeEligibleHeros() {
 
@@ -583,17 +583,27 @@ public class FightInstance {
             boss.nextAttack = BossAttacks.attack4;
             boss.nextTargets = UsefulFunctions.randomInt(0, listOfHeroesInFight.size());
         }
-        if (boss.lifePoints <= boss.maximumLifePoints * 0.25 && UsefulFunctions.randomInt(0, 10) > 3){
-            boss.nextAttack = BossAttacks.attack3 ;
-            boss.nextTargets = 0 ;
+        if (boss.lifePoints <= boss.maximumLifePoints * 0.25 && UsefulFunctions.randomInt(0, 10) > 2) {
+            boss.nextAttack = BossAttacks.attack3;
+            boss.nextTargets = 0;
         }
-        for (int i = 0 ; i < listOfHeroesInFight.size() ; i++){
-            if (listOfHeroesInFight.get(i).lifePoints < 70 ){
-                boss.nextAttack = BossAttacks.attack1 ;
-                boss.nextTargets = i ;
+        for (int i = 0; i < listOfHeroesInFight.size(); i++) {
+            if (listOfHeroesInFight.get(i).lifePoints < 70) {
+                boss.nextAttack = BossAttacks.attack1;
+                boss.nextTargets = i;
+                return;
             }
         }
 
+        int random = (UsefulFunctions.randomInt(1, 3));
+        switch (random) {
+            case 1 -> boss.nextAttack = BossAttacks.attack1;
+            case 2 -> boss.nextAttack = BossAttacks.attack2;
+            case 3 -> boss.nextAttack = BossAttacks.attack4;
+
+        }
+        if (boss.nextAttack.get(name).equals("Low Kick")) boss.nextTargets = 5;
+        else boss.nextTargets = UsefulFunctions.randomInt(0, listOfHeroesInFight.size());
 
     }
 

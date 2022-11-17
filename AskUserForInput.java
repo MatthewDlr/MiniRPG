@@ -42,7 +42,7 @@ public class AskUserForInput {
             }
 
             if (userInput < min || userInput > max) {
-                System.out.println("Error, choice is out of range of range");
+                System.out.println("Error, choice is out of range");
                 isInputCorrect = false;
             }
 

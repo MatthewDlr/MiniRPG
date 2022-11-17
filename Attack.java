@@ -28,7 +28,7 @@ final class HunterAttacks extends Attack{
     
 final class MageAttacks extends Attack{
     //Attack Model :                                                 Name            ,Description                                                                          , Damage, Targets nb, Soul cost, Soul change, Defense change
-    static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Shadow Sneak"  , "Attack an Enemy from behind"                                                       , 30   ,  1         , 0        , 1d         , 1d             ));
+    static ArrayList<Object> attack1 = new ArrayList<>(Arrays.asList("Shadow Sneak"  , "Attack an Enemy from behind"                                                       , 40   ,  1         , 0        , 1d         , 1d             ));
     static ArrayList<Object> attack2 = new ArrayList<>(Arrays.asList("Souls focus"   , "Focus on increasing the current number of souls"                                   , 0    ,  0         , 0        , 1.20d      , 1d             ));
     static ArrayList<Object> attack3 = new ArrayList<>(Arrays.asList("Souls Guard"   , "Increase the defense of the team"                                                  , 0    ,  4         , 20       , 1d         , 1.20d          ));
     static ArrayList<Object> attack4 = new ArrayList<>(Arrays.asList("Final Shout"   , "Gathering all the souls to attack with (the damages depend of the number of souls)", 99   ,  1         , 999      , 1d         , 1d             ));
