@@ -2,54 +2,87 @@ import java.util.*;
 
 
 public class Game {
+
+    public InputParser inputParser ;
     public String nameOfThePlayer;
     public int numberOfHerosInput;
-    public double difficultyCoef = 0.47;
+    public double difficultyCoef = 0.6;
     public List<Combatant> listOfHeros = new ArrayList<>();
 
     public FightInstance fight;
 
+    public Game(){
+    }
+
+
     public void initializeGame() {
+        this.inputParser = ChoseParserMode();
         askUserHisName();
         askUserTheNumberOfHero();
         askUserTheClassOfHeros();
+        for (int numberOfFights = 1; numberOfFights <= 5 ; numberOfFights ++){
+            initializeFight(numberOfFights);
+            playFight(numberOfFights);
+        }
+        initializeBossFight();
+        playFight(6);
+
+        inputParser.printDialog("Okay cool you just won the game (finally)");
+        inputParser.printDialog("Now get out of my world before I kick your ass");
+
     }
 
+    public InputParser ChoseParserMode() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Would you like to play in Console mode (1) or in UI mode (2) ? ");
+        String userInput = scanner.nextLine();
+
+        if (userInput.equalsIgnoreCase("1") || userInput.contains("console") || userInput.equalsIgnoreCase("console") || userInput.replace("\\s", "").equals("")) {
+            System.out.println("Game is starting in console mode... \n\n\n");
+            inputParser = new ConsoleParser();
+        } else {
+            System.out.println("Starting UI mode... \n\n\n");
+            inputParser = new UIParser();
+        }
+        return inputParser ;
+    }
+
+
     public void initializeFight(int numberOfFights) {
-        this.fight = new FightInstance();
+        this.fight = new FightInstance(inputParser);
         if (numberOfFights > 1) upgradeHeroes();
         fight.creatingEnemiesWave(this);
         fight.gatheringHerosAndMonster(this);
         fight.sortingCombatantsBySpeed();
-        System.out.println("Hurry up " + nameOfThePlayer + " the fight is about to start !");
-        System.out.println("Press any key to continue");
-        AskUserForInput.AString();
+
+        inputParser.printDialog("Hurry up " + nameOfThePlayer + " the fight is about to start !");
+        inputParser.pressEnterToContinue();
 
     }
-    public void  initializeBossFight(){
-        this.fight = new FightInstance();
+
+    public void initializeBossFight() {
+        this.fight = new FightInstance(inputParser);
         upgradeHeroes();
-        fight.creatingBossWave(this);
+        fight.creatingBossWave(this, inputParser);
         fight.sortingCombatantsBySpeed();
-        System.out.println("Let's go " + nameOfThePlayer + " the end game is approaching");
-        System.out.println("Press any key to continue");
-        AskUserForInput.AString();
+        inputParser.printDialog("Let's go " + nameOfThePlayer + " the end game is approaching");
+        inputParser.pressEnterToContinue();
 
     }
 
     public void upgradeHeroes() {
-        System.out.println("\n Your team have been healed to be ready for next fight");
-        
+        inputParser.printDialog("\nYour team have been healed to be ready for next fight");
+
         for (Combatant hero : listOfHeros) {
 
-            System.out.println("Which stats of your " + hero.name + " " + hero.combatantID + " do you want to upgrade ? ");
-            System.out.println(" 1/ Attack \n 2/ Defense \n 3/ Life Points \n 4/ Speed");
-            int userChoice = AskUserForInput.AnIntBetween(1, 4);
+            inputParser.printDialog("Which stats of your " + hero.name + " " + hero.combatantID + " do you want to upgrade ? ");
+            inputParser.printDialog(" 1/ Attack \n 2/ Defense \n 3/ Life Points \n 4/ Speed");
+            int userChoice = inputParser.AskAnIntBetween(1, 4);
 
-            hero.attack = hero.maximumAttack ;
-            hero.defense = hero.maximumDefense ;
-            hero.lifePoints = hero.maximumLifePoints ;
-            hero.speed = hero.maximumSpeed ;
+            hero.attack = hero.maximumAttack;
+            hero.defense = hero.maximumDefense;
+            hero.lifePoints = hero.maximumLifePoints;
+            hero.speed = hero.maximumSpeed;
 
 
             switch (userChoice) {
@@ -58,11 +91,11 @@ public class Game {
                 case 2 -> hero.defense *= 1.25;
                 case 3 -> {
                     hero.lifePoints *= 1.25;
-                    hero.maximumLifePoints = hero.lifePoints ;
+                    hero.maximumLifePoints = hero.lifePoints;
                 }
                 case 4 -> hero.speed *= 1.25;
             }
-            System.out.println("Boomm, the stat " + userChoice + " of your " + hero.name + " " + hero.combatantID + " has been increased by 25% \n");
+            inputParser.printDialog("Boomm, the stat " + userChoice + " of your " + hero.name + " " + hero.combatantID + " has been increased by 25% \n");
         }
     }
 
@@ -70,63 +103,59 @@ public class Game {
         fight.fightEngine();
 
         if (fight.isFightWon) {
-            System.out.println("Congrats " + nameOfThePlayer + " you just won your fight " + numberOfFights + " !");
+            inputParser.printDialog("Congrats " + nameOfThePlayer + " you just won your fight " + numberOfFights + " !");
         } else {
-            System.out.println("\n-------------------------------------------------------------------------------------------------");
-            System.out.println("Unforthunately, you're too weak to fight against those monsters");
-            System.out.println("I shouldn't have given to you a pokemo... Uhm the chance of being here");
-            System.out.println("Well get out now " + nameOfThePlayer);
+            inputParser.printSeparation();
+            inputParser.printDialog("Unforthunately, you're too weak to fight against those monsters");
+            inputParser.printDialog("I shouldn't have given to you a pokemo... Uhm the chance of being here");
+            inputParser.printDialog("Well get out now " + nameOfThePlayer);
+            inputParser.printSeparation();
             System.exit(0);
         }
     }
 
     public void askUserHisName() {
-        System.out.println("Hello player on this new adventure !");
-        System.out.print("Please remind me your name: ");
-        nameOfThePlayer = (AskUserForInput.AString()).replaceAll("\\s", "");
+        inputParser.printDialog("Hello player on this new adventure !");
+        inputParser.printDialogNoNewLine("Please remind me your name: ");
+
+        nameOfThePlayer = (inputParser.AskAString()).replaceAll("\\s", "");
 
         if (nameOfThePlayer.equals("")) {
             nameOfThePlayer = "Dumbass";
         }
-        System.out.println();
     }
 
     public void askUserTheNumberOfHero() {
-        System.out.println("Oh, " + nameOfThePlayer + " ! Yeah I remember you now.");
-        System.out.print("And... ahem, how many hero are going to fight by your side ? ");
-        numberOfHerosInput = AskUserForInput.AnInt();
-        System.out.println();
+        inputParser.printDialog("Oh, " + nameOfThePlayer + " ! Yeah I remember you now.\n");
+        inputParser.printDialogNoNewLine("And... ahem, how many hero are going to fight by your side ? ");
+        numberOfHerosInput = inputParser.AskAnInt();
+
         while (numberOfHerosInput > 5) {
-            System.out.println("Oh no no, you are too many on this adventure. Your teammates can be up to 5");
-            System.out.print("So, how many hero are going to fight by your side ? ");
-            numberOfHerosInput = AskUserForInput.AnInt();
+            inputParser.printDialog("Oh no no, you are too many on this adventure. Your teammates can be up to 5");
+            inputParser.printDialogNoNewLine("So, how many hero are going to fight by your side ? ");
+            numberOfHerosInput = inputParser.AskAnInt();
         }
-        System.out.println("Umm, so you are going to be " + numberOfHerosInput + " heros, that's a great start " + nameOfThePlayer + ".");
-        System.out.print("Press any key to continue");
-        AskUserForInput.AString();
+        inputParser.printDialog("Umm, so you are going to be " + numberOfHerosInput + " heros, that's a great start " + nameOfThePlayer + ".");
+        inputParser.pressEnterToContinue();
     }
 
     public void askUserTheClassOfHeros() {
-        System.out.println("It's time to chose which heroes are going with you ?");
-        System.out.println(" 1/ Warrior   Talent: Last Power      (When his life is under 25%, his attack is increased by 20%)");
-        System.out.println(" 2/ Hunter    Talent: Brave Bow       (When his life is full, arrows are not used) ");
-        System.out.println(" 3/ Mage      Talent: Soul gathering  (Damaging enemies produce a small amount of souls)");
-        System.out.println(" 4/ Healer    Talent: Self Help       (Life points are increased by 10% if no damages are received during a turn) \n");
+        inputParser.printDialog("It's time to chose which heroes are going with you ?");
+        inputParser.printDialog(" 1/ Warrior   Talent: Last Power      (When his life is under 25%, his attack is increased by 20%)");
+        inputParser.printDialog(" 2/ Hunter    Talent: Brave Bow       (When his life is full, arrows are not used) ");
+        inputParser.printDialog(" 3/ Mage      Talent: Soul gathering  (Damaging enemies produce a small amount of souls)");
+        inputParser.printDialog(" 4/ Healer    Talent: Self Help       (Life points are increased by 10% if no damages are received during a turn) \n");
         for (int heroNumber = 1; heroNumber <= numberOfHerosInput; heroNumber++) {
-            System.out.print("What is the class of hero " + heroNumber + " hum ? ");
+            inputParser.printDialog("What is the class of hero " + heroNumber + " hum ? ");
 
-            int userInput = AskUserForInput.AnInt();
-            while (userInput > 4 || userInput < 1) {
-                System.out.print("You're choice isn't recognized");
-                userInput = AskUserForInput.AnInt();
-            }
+            int userInput = inputParser.AskAnIntBetween(1, 4);
             settingUpHeroClass(userInput, heroNumber);
         }
-        System.out.print("Alright, there is your team : ");
+        inputParser.printDialog("Alright, there is your team : ");
         for (Combatant combatant : listOfHeros) {
-            System.out.print(combatant.name + ", ");
+            inputParser.printDialogNoNewLine(combatant.name + ", ");
         }
-        System.out.println("\nYour team look terrible but anyway, at least we can jump in.");
+        inputParser.printDialog("\nYour team look terrible but anyway, at least we can jump in.");
     }
 
     public void settingUpHeroClass(int choiceAnswer, int heroNumber) {
@@ -146,7 +175,7 @@ public class Game {
                 warrior.talent = "Last Power";
                 warrior.talentDescription = "When his life is under 25%, his attack is increased by 20%";
                 this.listOfHeros.add(warrior);
-                System.out.println("Boooom! Hero number " + heroNumber + " is now a warrior");
+                inputParser.printDialog("Boooom! Hero number " + heroNumber + " is now a warrior");
             }
             case 2 -> {
                 Hunter hunter = new Hunter();
@@ -164,7 +193,7 @@ public class Game {
                 hunter.talent = "Brave Bow";
                 hunter.talentDescription = "When his life is full, arrows are not used ";
                 listOfHeros.add(hunter);
-                System.out.println("And snap ! Hero number " + heroNumber + " is now a hunter");
+                inputParser.printDialog("And snap ! Hero number " + heroNumber + " is now a hunter");
             }
             case 3 -> {
                 Mage mage = new Mage();
@@ -182,7 +211,7 @@ public class Game {
                 mage.talentDescription = "Damaging enemies produce a small amount of souls";
                 mage.combatantID = heroNumber;
                 listOfHeros.add(mage);
-                System.out.println("Wooaaa ! Hero number " + heroNumber + " is now a mage");
+                inputParser.printDialog("Wooaaa ! Hero number " + heroNumber + " is now a mage");
             }
             case 4 -> {
                 Healer healer = new Healer();
@@ -200,10 +229,10 @@ public class Game {
                 healer.talentDescription = "Life points are increased by 10% if no damages are received during a turn";
                 healer.combatantID = heroNumber;
                 listOfHeros.add(healer);
-                System.out.println("Flouf ! Hero number " + heroNumber + " is now a healer");
+                inputParser.printDialog("Flouf ! Hero number " + heroNumber + " is now a healer");
             }
             default -> throw new IllegalStateException("Unexpected value: " + choiceAnswer);
         }
-        System.out.println();
+        inputParser.pressEnterToContinue();
     }
 }
