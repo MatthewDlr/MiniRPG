@@ -18,7 +18,7 @@ public class FightInstance {
     public void creatingEnemiesWave(Game game) {
         game.difficultyCoef += 0.2;
         int id = 0;
-        for (Combatant hero : game.listOfHeros) {
+        for (Combatant hero : game.listOfHeroes) {
             id++;
             Enemy enemy = new Enemy();
             enemy.combatantID = id;
@@ -44,7 +44,7 @@ public class FightInstance {
         double higestSpeed = 0;
         double highestDefense = 0;
 
-        listOfHeroesInFight.addAll(game.listOfHeros);
+        listOfHeroesInFight.addAll(game.listOfHeroes);
 
         for (Combatant hero : listOfHeroesInFight) {
             totallife += hero.lifePoints;
@@ -67,15 +67,15 @@ public class FightInstance {
         boss.maximumLifePoints = boss.lifePoints;
 
         listOfEnemiesInFight.add(boss);
-        listOfCombatantsInFight.addAll(game.listOfHeros);
+        listOfCombatantsInFight.addAll(game.listOfHeroes);
         listOfCombatantsInFight.add(boss);
 
         inputParser.pressEnterToContinue();
     }
 
-    public void gatheringHerosAndMonster(Game game) {
-        listOfHeroesInFight.addAll(game.listOfHeros);
-        listOfCombatantsInFight.addAll(game.listOfHeros);
+    public void gatheringHeroesAndMonster(Game game) {
+        listOfHeroesInFight.addAll(game.listOfHeroes);
+        listOfCombatantsInFight.addAll(game.listOfHeroes);
         listOfCombatantsInFight.addAll(listOfEnemiesInFight);
     }
 
@@ -115,7 +115,7 @@ public class FightInstance {
                 }
             }
             sortingCombatantsBySpeed();
-            prioritizeEligibleHeros();
+            prioritizeEligibleHeroes();
             printCombatantOrder();
 
             for (Combatant combatant : listOfCombatantsInFight) {
@@ -317,11 +317,11 @@ public class FightInstance {
     }
 
 
-    public void prioritizeEligibleHeros() {
+    public void prioritizeEligibleHeroes() {
 
         int i = 0;
-        List<Combatant> copyOflistOfHerosInFight = new ArrayList<>(listOfCombatantsInFight);
-        for (Combatant hero : copyOflistOfHerosInFight) {
+        List<Combatant> copyOflistOfHeroesInFight = new ArrayList<>(listOfCombatantsInFight);
+        for (Combatant hero : copyOflistOfHeroesInFight) {
             if (hero.name.equals("Hunter") && hero.nextAttack.get(name).equals("Quick Attack")) {
                 listOfCombatantsInFight.remove(i);
 

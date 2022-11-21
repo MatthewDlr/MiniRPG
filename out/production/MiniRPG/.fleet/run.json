@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Build",
+            "type": "jps-build",
+            "module": "MiniRPG",
+            "includeTests": false
+        },
+        {
+            "name": "Main",
+            "type": "jps-run",
+            "dependsOn": [
+                "Build"
+            ],
+            "mainClass": "Main",
+            "module": "MiniRPG",
+            "options": [
+                "-Dfile.encoding=UTF-8",
+                "-Dsun.stdout.encoding=UTF-8",
+                "-Dsun.stderr.encoding=UTF-8",
+                "-classpath",
+                "\"C:\\Users\\matth\\OneDrive - ISEP\\A1\\Algorithmes et Programmation\\Codes\\MiniRPG\\out\\production\\MiniRPG\""
+            ]
+        }
+    ]
+}

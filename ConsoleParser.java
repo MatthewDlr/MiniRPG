@@ -1,4 +1,5 @@
 import static java.lang.System.*;
+
 import java.util.*;
 
 // Rule N°1 : Never trust the user, these functions check that the inputs are good
@@ -14,7 +15,7 @@ public class ConsoleParser implements InputParser {
 
     @Override
     public void printSeparation() {
-        for (int i = 0 ; i < 150; i++){
+        for (int i = 0; i < 150; i++) {
             out.print("-");
         }
         printDialog("");
@@ -26,7 +27,7 @@ public class ConsoleParser implements InputParser {
     }
 
     @Override
-    public void printDialogNoNewLine(String textToPrint){
+    public void printDialogNoNewLine(String textToPrint) {
         out.print(textToPrint);
     }
 
@@ -50,7 +51,7 @@ public class ConsoleParser implements InputParser {
         printSeparation();
         printDialog("Here is the order in which the Combatants are going to attack this tour \n(Ordered by combatant's speed and heroes with prioritized attacks)");
         for (Combatant combatant : listOfCombatantsInFight) {
-            if (number == 10)  printDialog(number + ": " + combatant.name);
+            if (number == 10) printDialog(number + ": " + combatant.name);
             else printDialog(number + " : " + combatant.name + " " + combatant.combatantID);
             number++;
         }
@@ -62,10 +63,10 @@ public class ConsoleParser implements InputParser {
     public void printEnemiesLife(ArrayList<Combatant> listOfEnemiesInFight) {
 
         printSeparation();
-        int i = 0 ;
+        int i = 0;
         for (Combatant enemy : listOfEnemiesInFight) {
             printDialogNoNewLine("Enemy " + i + " : " + enemy.lifePoints + "/" + enemy.maximumLifePoints + " hp   |   ");
-            i++ ;
+            i++;
         }
         printDialog("");
         printSeparation();
@@ -75,15 +76,21 @@ public class ConsoleParser implements InputParser {
     @Override
     public int AskAnInt() {
         out.print("\nWhat is your choice ? ");
-        Scanner scanner = new Scanner(System.in);
-        int userInput = 0 ;
+        int userInput = 0;
+        boolean isCorect;
 
-        try {
-            userInput = scanner.nextInt();
-        } catch (Exception e) {
-            out.println("Bad input, your choice must be a number");
-            AskAnInt();
-        }
+        do {
+            isCorect = true;
+            Scanner scanner = new Scanner(System.in);
+
+            try {
+                userInput = scanner.nextInt();
+            } catch (Exception e) {
+                out.println("Bad input, your choice must be a number");
+                isCorect = false;
+            }
+        } while (!isCorect);
+
         out.println();
         return userInput;
     }
@@ -91,20 +98,27 @@ public class ConsoleParser implements InputParser {
     @Override
     public int AskAnIntBetween(int min, int max) {
         out.print("\nWhat is your choice ? ");
-        Scanner scanner = new Scanner(System.in);
-        int userInput = 0 ;
+        int userInput = 0;
+        boolean isCorect;
 
-        try {
-            userInput = scanner.nextInt();
-        } catch (Exception e) {
-            out.println("Bad input, your choice must be a number");
-            AskAnIntBetween(min, max);
-        }
+        do {
 
-        if (userInput < min || userInput > max) {
-            out.println("Bad input, choice is out of range");
-            AskAnIntBetween(min, max);
-        }
+            Scanner scanner = new Scanner(System.in);
+            isCorect = true;
+
+            try {
+                userInput = scanner.nextInt();
+            } catch (Exception e) {
+                out.println("Bad input, your choice must be a number");
+                isCorect = false;
+            }
+
+            if (userInput < min || userInput > max) {
+                out.println("Bad input, choice is out of range");
+                isCorect = false;
+            }
+        } while (!isCorect);
+
         out.println();
         return userInput;
     }
