@@ -8,9 +8,10 @@ Yes, the game is fully functional.
 
 ### 3/ Is the game working in UI mode?
 Unfortunately, the game is not working in UI mode due to a huge difficulty in the Input Parser.
+There is a working UI, but it will stop before the beginning of a fight.
 
 ### 4/ Is the UI will be functional one day?
-Nope, the development has been drop out to focus on other stuff such as the new game to develop.
+Nope, the development has been dropped out to focus on other stuff such as the new game to develop.
 
 ### 5/ Is the Input Parser functional?
 Yes! The Input parser is successfully working and redirect the output/input toward the chosen method. 
