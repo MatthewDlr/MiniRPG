@@ -10,8 +10,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-import java.io.File;
-
 public class JavaFX extends Application {
     static Game game;
 
