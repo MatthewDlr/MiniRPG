@@ -24,7 +24,7 @@ Nope, the code is visually messy, hardly not optimized and surely not really ple
 One of the hardest things for me was to keep code clean over time and I failed at it, it's why my project feels like messy.
 Yes I could rework my project and start everything from scratch but I just ran out of time, sorry.
 
-### 7/ Did I made unitary tests?
+### 7/ Did I make unitary tests?
 Not this time. Unitary tests are still blurry for me, and I struggled to figure out how implement them so I skipped them.
 But I'm planning to developp my next project driven by tests development in order to fix this lack.
 
